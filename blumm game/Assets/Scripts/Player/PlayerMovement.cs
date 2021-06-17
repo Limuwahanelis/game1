@@ -21,7 +21,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (_rb.velocity.y < 0) _player.isFalling = true;
+        else _player.isFalling = false;
     }
 
     public void MovePlayer(float direction)

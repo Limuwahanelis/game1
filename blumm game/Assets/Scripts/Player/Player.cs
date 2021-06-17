@@ -12,7 +12,7 @@ public class Player : MonoBehaviour,IAnimatable
     public bool isJumping;
     public bool isMovableByPlayer = true;
     public bool isOnGround;
-
+    public bool isFalling;
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
 
@@ -41,6 +41,11 @@ public class Player : MonoBehaviour,IAnimatable
                     StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Jump"), (result => isJumping = result), isJumping));
                 }
             }
+        }
+
+        if (!isOnGround)
+        {
+            if (isFalling) PlayAnimation("Fall");
         }
     }
 
