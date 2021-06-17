@@ -42,4 +42,8 @@ public class PlayerMovement : MonoBehaviour
         _player.isMoving = false;
         _rb.velocity = new Vector2(0, _rb.velocity.y);
     }
+    public void Jump()
+    {
+
+    }
 }

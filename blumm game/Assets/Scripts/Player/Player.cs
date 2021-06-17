@@ -9,9 +9,11 @@ public class Player : MonoBehaviour,IAnimatable
     public PlayerMovement playerMovement;
 
     public bool isMoving;
+    public bool isJumping;
 
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
+
 
 
 
