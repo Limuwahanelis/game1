@@ -25,6 +25,7 @@ public class Player : MonoBehaviour,IAnimatable
     void Update()
     {
         if (isMoving) PlayAnimation("Walk");
+        else PlayAnimation("Idle");
     }
 
     public float GetAnimationLength(string name)
