@@ -10,6 +10,8 @@ public class Player : MonoBehaviour,IAnimatable
 
     public bool isMoving;
     public bool isJumping;
+    public bool isMovableByPlayer = true;
+    public bool isOnGround;
 
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
@@ -26,8 +28,20 @@ public class Player : MonoBehaviour,IAnimatable
     // Update is called once per frame
     void Update()
     {
-        if (isMoving) PlayAnimation("Walk");
-        else PlayAnimation("Idle");
+        if (isMovableByPlayer)
+        {
+            if (isOnGround)
+            {
+                if (isMoving) PlayAnimation("Walk");
+                else PlayAnimation("Idle");
+                if (isJumping)
+                {
+                    isMovableByPlayer = false;
+                    PlayAnimation("Jump");
+                    StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Jump"), (result => isJumping = result), isJumping));
+                }
+            }
+        }
     }
 
     public float GetAnimationLength(string name)
@@ -38,5 +52,12 @@ public class Player : MonoBehaviour,IAnimatable
     public void PlayAnimation(string name)
     {
         OnPlayAnimation?.Invoke(name);
+    }
+
+    IEnumerator WaitForAnimationToEnd(float animationLength,Action<bool> myVariableLambda,bool currentValue)
+    {
+        yield return new WaitForSeconds(animationLength);
+        myVariableLambda(!currentValue);
+        isMovableByPlayer = true;
     }
 }

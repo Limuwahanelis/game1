@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _speed;
     private float _flipSide = 1; // 1- right, -1 - left
+    [SerializeField]
+    private float _jumpForce;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +46,15 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Jump()
     {
-
+        if (!_player.isJumping)
+        {
+            _player.isJumping = true;
+        }
     }
+
+    public void JumpAnimationLogic()
+    {
+        _rb.AddForce(new Vector2(0, _jumpForce));
+    }
+     
 }
