@@ -6,7 +6,6 @@ public class PlayerInput : MonoBehaviour
 {
 
     public Player player;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -17,19 +16,7 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         float direction = Input.GetAxisRaw("Horizontal");
-        if (player.isMovableByPlayer)
-        {
-
-
-            if (direction != 0)
-            {
-                player.playerMovement.MovePlayer(direction);
-            }
-            else
-            {
-                player.playerMovement.StopPlayer();
-            }
-        }
+        player.playerMovement.MovePlayer(direction);
         if(Input.GetButtonDown("Jump"))
         {
             player.playerMovement.Jump();

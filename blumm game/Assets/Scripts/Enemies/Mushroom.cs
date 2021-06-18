@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Mushroom : Enemy,IAnimatable
 {
+    public int idleCycles;
     public List<Transform> patrolPoints = new List<Transform>();
     private List<Vector3> _patrolpositions = new List<Vector3>();
     private int _patrolPointIndex = 0;
 
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
-    public int idleCycles;
     private bool _isIdle;
     // Start is called before the first frame update
     void Start()
@@ -34,15 +34,20 @@ public class Mushroom : Enemy,IAnimatable
         if (!_isIdle)
         {
             PlayAnimation("Move");
-            transform.position = Vector3.MoveTowards(transform.position, _patrolpositions[_patrolPointIndex], speed * Time.deltaTime);
             //RaiseOnWalkEvent();
+            transform.position = Vector3.MoveTowards(transform.position, _patrolpositions[_patrolPointIndex], speed * Time.deltaTime);
+
             if (Mathf.Abs(transform.position.x - _patrolpositions[_patrolPointIndex].x) < 0.1)
             {
-
                 if (_patrolPointIndex + 1 > _patrolpositions.Count - 1) _patrolPointIndex = 0;
                 else _patrolPointIndex++;
 
-                StartCoroutine(IdleTimerCor());
+                if (idleCycles >0 ) StartCoroutine(IdleTimerCor());
+                else
+                {
+                    if (_patrolpositions[_patrolPointIndex].x < transform.position.x) RotateEnemy(-1);
+                    else RotateEnemy(1);
+                }
 
             }
         }
@@ -53,7 +58,6 @@ public class Mushroom : Enemy,IAnimatable
         else _isIdle = true;
         PlayAnimation("Idle");
         yield return new WaitForSeconds(idleCycles*GetAnimationLength("Idle"));
-
         if (_patrolpositions[_patrolPointIndex].x < transform.position.x) RotateEnemy(-1);
         else RotateEnemy(1);
         _isIdle = false;
@@ -81,7 +85,7 @@ public class Mushroom : Enemy,IAnimatable
         IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
         if (tmp != null)
         {
-            tmp.TakeDamage(dmg);
+            tmp.TakeDamage(dmg,gameObject);
         }
     }
     //private void OnTriggerEnter2D(Collision2D collision)

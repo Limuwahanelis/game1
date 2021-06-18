@@ -9,18 +9,18 @@ public class HealthSystem : MonoBehaviour, IDamagable
 
     public IntReference maxHP;
     public IntReference currentHP;
-    public Action OnHitEvent;
+    public Action<GameObject> OnHitEvent;
     public Action OnDeathEvent;
     // Start is called before the first frame update
     void Start()
     {
         currentHP.value = maxHP.value;
     }
-    public virtual void TakeDamage(int dmg)
+    public virtual void TakeDamage(int dmg,GameObject dmgDealer)
     {
         currentHP.value =(int)Mathf.Clamp(currentHP.value -= dmg, 0, Mathf.Infinity);
         
-        OnHitEvent?.Invoke();
+        OnHitEvent?.Invoke(dmgDealer);
         if (currentHP.value <= 0) Kill();
     }
 

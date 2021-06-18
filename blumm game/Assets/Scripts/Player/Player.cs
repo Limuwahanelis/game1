@@ -5,9 +5,21 @@ using UnityEngine;
 
 public class Player : MonoBehaviour,IAnimatable
 {
+    public enum Cause
+    {
+        NONE,
+        ENEMY,
+        OVERRIDE,
+        ATTACK,
+        JUMP,
+    }
+    public Cause NoControlCause = Cause.NONE;
+
     public GameObject mainBody;
     public PlayerMovement playerMovement;
     public PlayerCombat playerCombat;
+    public HealthSystem playerHealth;
+
 
     public bool isMoving;
     public bool isJumping;
@@ -15,6 +27,7 @@ public class Player : MonoBehaviour,IAnimatable
     public bool isOnGround;
     public bool isFalling;
     public bool isAttacking;
+    public bool isPushedBack;
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
 
@@ -26,6 +39,9 @@ public class Player : MonoBehaviour,IAnimatable
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        playerHealth = GetComponent<HealthSystem>();
+        playerHealth.OnHitEvent += playerMovement.CollidedWithEnemy;
+        playerHealth.OnDeathEvent += () => { };
     }
 
     // Update is called once per frame
@@ -39,13 +55,13 @@ public class Player : MonoBehaviour,IAnimatable
                 else PlayAnimation("Idle");
                 if (isJumping)
                 {
-                    isMovableByPlayer = false;
+                    TakeControlFromPlayer(Cause.JUMP);
                     PlayAnimation("Jump");
-                    StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Jump"), (result => isJumping = result), isJumping));
+                    StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Jump"), (result => isJumping = result), isJumping,Cause.JUMP));
                 }
                 if(isAttacking)
                 {
-                    isMovableByPlayer = false;
+                    TakeControlFromPlayer(Cause.ATTACK);
                     PlayAnimation("Attack");
                     StartCoroutine(AttackCor(GetAnimationLength("Attack"), (result => isAttacking = result), isAttacking));
                 }
@@ -56,8 +72,66 @@ public class Player : MonoBehaviour,IAnimatable
         {
             if (isFalling) PlayAnimation("Fall");
         }
+        //if (isOnGround) ReturnControlToPlayer(Cause.ENEMY);
     }
 
+
+
+
+
+    public void ReturnControlToPlayer(Cause returnControlCause)
+    {
+        if (NoControlCause == Cause.NONE) return;
+        if (returnControlCause == Cause.OVERRIDE)
+        {
+            isMovableByPlayer = true;
+            NoControlCause = Cause.NONE;
+            return;
+        }
+        if (NoControlCause != returnControlCause) return;
+        else
+        {
+            isMovableByPlayer = true;
+        }
+        NoControlCause = Cause.NONE;
+    }
+
+    public void TakeControlFromPlayer(Cause takeAwayCause)
+    {
+        isMovableByPlayer = false;
+        NoControlCause = takeAwayCause;
+        playerMovement.StopPlayer();
+        //rb.velocity = new Vector2(0, 0);
+    }
+    IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue, Cause noControlReason)
+    {
+        yield return new WaitForSeconds(animationLength);
+        myVariableLambda(!currentValue);
+        ReturnControlToPlayer(noControlReason);
+    }
+
+    IEnumerator AttackCor(float animationLength, Action<bool> myVariableLambda, bool currentValue)
+    {
+        attackEffect.SetActive(true);
+        yield return new WaitForSeconds(animationLength);
+        myVariableLambda(!currentValue);
+        ReturnControlToPlayer(Cause.ATTACK);
+        attackEffect.SetActive(false);
+    }
+
+    public IEnumerator WaitForPlayerToLandOnGroundAfterPush()
+    {
+        while(isOnGround)
+        {
+            yield return null;
+        }
+        while(!isOnGround)
+        {
+            yield return null;
+        }
+        ReturnControlToPlayer(Cause.ENEMY);
+        isPushedBack = false;
+    }
     public float GetAnimationLength(string name)
     {
         return (float)(OnGetAnimationLength?.Invoke(name));
@@ -66,22 +140,6 @@ public class Player : MonoBehaviour,IAnimatable
     public void PlayAnimation(string name)
     {
         OnPlayAnimation?.Invoke(name);
-    }
-
-    IEnumerator WaitForAnimationToEnd(float animationLength,Action<bool> myVariableLambda,bool currentValue)
-    {
-        yield return new WaitForSeconds(animationLength);
-        myVariableLambda(!currentValue);
-        isMovableByPlayer = true;
-    }
-
-    IEnumerator AttackCor(float animationLength, Action<bool> myVariableLambda, bool currentValue)
-    {
-        attackEffect.SetActive(true);
-        yield return new WaitForSeconds(animationLength);
-        myVariableLambda(!currentValue);
-        isMovableByPlayer = true;
-        attackEffect.SetActive(false);
     }
 
 }

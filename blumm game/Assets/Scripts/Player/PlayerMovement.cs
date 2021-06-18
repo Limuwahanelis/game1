@@ -4,21 +4,32 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public Transform t1;
+    public Transform t2;
+
     private Player _player;
     private Rigidbody2D _rb;
     [SerializeField]
     private float _speed;
-    private float _flipSide = 1; // 1- right, -1 - left
+    [SerializeField]
+    private float _pushForce;
     [SerializeField]
     private float _jumpForce;
+
+    private float _flipSide = 1; // 1- right, -1 - left
+    private float _previousDirection;
 
     public GameObject jumpEffectPrefab;
     public Transform jumpEffectPos;
     // Start is called before the first frame update
     void Start()
     {
+
         _player = GetComponent<Player>();
         _rb = GetComponent<Rigidbody2D>();
+        Vector2 pf = t2.position - t1.position;
+        //Vector2 pf = new Vector2(pushDire.x, 1) * _pushForce;
+        //_rb.AddForce(pf * _pushForce, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -30,20 +41,36 @@ public class PlayerMovement : MonoBehaviour
 
     public void MovePlayer(float direction)
     {
-        _rb.velocity = new Vector3(Input.GetAxisRaw("Horizontal") * _speed, _rb.velocity.y, 0);
-        if (direction > 0)
+        if (direction != 0)
         {
-            _flipSide = 1;
-            _player.mainBody.transform.localScale = new Vector3(_flipSide, _player.mainBody.transform.localScale.y, _player.mainBody.transform.localScale.z);
+            if (_player.NoControlCause != Player.Cause.ENEMY)
+            {
+                _rb.velocity = new Vector3(direction * _speed, _rb.velocity.y, 0);
+                if (direction > 0)
+                {
+                    _flipSide = 1;
+                    _player.mainBody.transform.localScale = new Vector3(_flipSide, _player.mainBody.transform.localScale.y, _player.mainBody.transform.localScale.z);
+                }
+                if (direction < 0)
+                {
+                    _flipSide = -1;
+                    _player.mainBody.transform.localScale = new Vector3(_flipSide, _player.mainBody.transform.localScale.y, _player.mainBody.transform.localScale.z);
+                }
+                _player.isMoving = true;
+            }
         }
-        if (direction < 0)
+        else
         {
-            _flipSide = -1;
-            _player.mainBody.transform.localScale = new Vector3(_flipSide, _player.mainBody.transform.localScale.y, _player.mainBody.transform.localScale.z);
+           if(_previousDirection!=0 && !_player.isPushedBack) StopPlayerOnXAxis();
         }
-        _player.isMoving = true;
+        _previousDirection = direction;
     }
     public void StopPlayer()
+    {
+        _player.isMoving = false;
+        _rb.velocity = new Vector2(0, 0);
+    }
+    public void StopPlayerOnXAxis()
     {
         _player.isMoving = false;
         _rb.velocity = new Vector2(0, _rb.velocity.y);
@@ -62,5 +89,17 @@ public class PlayerMovement : MonoBehaviour
         GameObject tmp= Instantiate(jumpEffectPrefab, jumpEffectPos.position, jumpEffectPrefab.transform.rotation);
         Destroy(tmp, 1f);
     }
-     
+    public void CollidedWithEnemy(GameObject enemy)
+    {
+        _player.TakeControlFromPlayer(Player.Cause.ENEMY);
+        _player.isPushedBack = true;
+        float pushDirection = 1;
+        if (enemy.transform.position.x > transform.position.x) pushDirection = -1;
+        Vector2 tmp = t2.position - t1.position;
+        Vector2 pushVector = new Vector2(tmp.x * pushDirection, tmp.y)*_pushForce;
+        //Vector2 pf = new Vector2(pushDire.x, 1) * _pushForce;
+        _rb.AddForce(pushVector,ForceMode2D.Impulse);
+        StartCoroutine(_player.WaitForPlayerToLandOnGroundAfterPush());
+        //_rb.AddForce(Vector2.up * _pushForce);
+    }
 }
