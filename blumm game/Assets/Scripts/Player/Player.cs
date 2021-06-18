@@ -67,10 +67,13 @@ public class Player : MonoBehaviour,IAnimatable
                 }
             }
         }
-
         if (!isOnGround)
         {
-            if (isFalling) PlayAnimation("Fall");
+            if (isFalling)
+            {
+                if(!isPushedBack) PlayAnimation("Fall");
+            }
+                
         }
         //if (isOnGround) ReturnControlToPlayer(Cause.ENEMY);
     }
@@ -121,7 +124,8 @@ public class Player : MonoBehaviour,IAnimatable
 
     public IEnumerator WaitForPlayerToLandOnGroundAfterPush()
     {
-        while(isOnGround)
+        PlayAnimation("Push");
+        while (isOnGround)
         {
             yield return null;
         }

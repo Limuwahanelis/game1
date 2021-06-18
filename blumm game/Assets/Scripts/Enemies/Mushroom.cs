@@ -81,7 +81,6 @@ public class Mushroom : Enemy,IAnimatable
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("col");
         IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
         if (tmp != null)
         {
