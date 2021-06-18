@@ -8,6 +8,7 @@ public class PlayerCombat : MonoBehaviour
     public Transform attackPos;
     public float attackRange;
     public LayerMask enemyLayer;
+    public int dmg;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +26,12 @@ public class PlayerCombat : MonoBehaviour
         if (!_player.isAttacking && _player.isOnGround)
         {
             _player.playerMovement.StopPlayer();
-            Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyLayer);
+            Collider2D[] hitEnemies =Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyLayer);
+            for(int i=0;i<hitEnemies.Length;i++)
+            {
+                IDamagable enemy = hitEnemies[i].GetComponentInParent<IDamagable>();
+                if (enemy!=null) enemy.TakeDamage(dmg,gameObject);
+            }
             _player.isAttacking = true;
         }
     }
