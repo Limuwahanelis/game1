@@ -11,7 +11,8 @@ public class Mushroom : Enemy,IAnimatable
 
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
-
+    public int idleCycles;
+    private bool _isIdle;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,20 +31,34 @@ public class Mushroom : Enemy,IAnimatable
 
     public void MoveToPatrolPoint()
     {
-        PlayAnimation("Move");
-        transform.position = Vector3.MoveTowards(transform.position, _patrolpositions[_patrolPointIndex], speed * Time.deltaTime);
-        //RaiseOnWalkEvent();
-        if (Mathf.Abs(transform.position.x- _patrolpositions[_patrolPointIndex].x) <0.1)
+        if (!_isIdle)
         {
+            PlayAnimation("Move");
+            transform.position = Vector3.MoveTowards(transform.position, _patrolpositions[_patrolPointIndex], speed * Time.deltaTime);
+            //RaiseOnWalkEvent();
+            if (Mathf.Abs(transform.position.x - _patrolpositions[_patrolPointIndex].x) < 0.1)
+            {
 
-            if (_patrolPointIndex + 1 > _patrolpositions.Count-1) _patrolPointIndex = 0;
-            else _patrolPointIndex++;
+                if (_patrolPointIndex + 1 > _patrolpositions.Count - 1) _patrolPointIndex = 0;
+                else _patrolPointIndex++;
 
-            if (_patrolpositions[_patrolPointIndex].x < transform.position.x) RotateEnemy(-1);
-            else RotateEnemy(1);
+                StartCoroutine(IdleTimerCor());
 
+            }
         }
     }
+    IEnumerator IdleTimerCor()
+    {
+        if (_isIdle) yield break;
+        else _isIdle = true;
+        PlayAnimation("Idle");
+        yield return new WaitForSeconds(idleCycles*GetAnimationLength("Idle"));
+
+        if (_patrolpositions[_patrolPointIndex].x < transform.position.x) RotateEnemy(-1);
+        else RotateEnemy(1);
+        _isIdle = false;
+    }
+
 
     private void RotateEnemy(int direction)
     {
@@ -58,7 +73,7 @@ public class Mushroom : Enemy,IAnimatable
 
     public float GetAnimationLength(string name)
     {
-        throw new NotImplementedException();
+        return (float)OnGetAnimationLength?.Invoke(name);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -66,7 +81,7 @@ public class Mushroom : Enemy,IAnimatable
         IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
         if (tmp != null)
         {
-            tmp.TakeDamage(1);
+            tmp.TakeDamage(dmg);
         }
     }
     //private void OnTriggerEnter2D(Collision2D collision)
