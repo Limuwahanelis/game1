@@ -18,9 +18,10 @@ public class HealthSystem : MonoBehaviour, IDamagable
     }
     public virtual void TakeDamage(int dmg)
     {
-        currentHP.value -= dmg;
+        currentHP.value =(int)Mathf.Clamp(currentHP.value -= dmg, 0, Mathf.Infinity);
+        
         OnHitEvent?.Invoke();
-        if (currentHP.value < 0) Kill();
+        if (currentHP.value <= 0) Kill();
     }
 
     public virtual void Kill()
