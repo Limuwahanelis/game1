@@ -78,10 +78,6 @@ public class Player : MonoBehaviour,IAnimatable
         //if (isOnGround) ReturnControlToPlayer(Cause.ENEMY);
     }
 
-
-
-
-
     public void ReturnControlToPlayer(Cause returnControlCause)
     {
         if (NoControlCause == Cause.NONE) return;

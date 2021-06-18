@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour, IDamagable
 {
-
+    public bool isInvincible;
     public IntReference maxHP;
     public IntReference currentHP;
     public Action<GameObject> OnHitEvent;
@@ -18,10 +18,16 @@ public class HealthSystem : MonoBehaviour, IDamagable
     }
     public virtual void TakeDamage(int dmg,GameObject dmgDealer)
     {
-        currentHP.value =(int)Mathf.Clamp(currentHP.value -= dmg, 0, Mathf.Infinity);
-        
-        OnHitEvent?.Invoke(dmgDealer);
-        if (currentHP.value <= 0) Kill();
+        if (!isInvincible)
+        {
+            currentHP.value = (int)Mathf.Clamp(currentHP.value -= dmg, 0, Mathf.Infinity);
+            if (currentHP.value <= 0)
+            {
+                Kill();
+                return;
+            }
+            OnHitEvent?.Invoke(dmgDealer);
+        }
     }
 
     public virtual void Kill()
