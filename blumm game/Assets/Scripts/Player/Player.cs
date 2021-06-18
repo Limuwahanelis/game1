@@ -7,16 +7,19 @@ public class Player : MonoBehaviour,IAnimatable
 {
     public GameObject mainBody;
     public PlayerMovement playerMovement;
+    public PlayerCombat playerCombat;
 
     public bool isMoving;
     public bool isJumping;
     public bool isMovableByPlayer = true;
     public bool isOnGround;
     public bool isFalling;
+    public bool isAttacking;
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
 
-
+    public GameObject attackEffect;
+    
 
 
     // Start is called before the first frame update
@@ -39,6 +42,12 @@ public class Player : MonoBehaviour,IAnimatable
                     isMovableByPlayer = false;
                     PlayAnimation("Jump");
                     StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Jump"), (result => isJumping = result), isJumping));
+                }
+                if(isAttacking)
+                {
+                    isMovableByPlayer = false;
+                    PlayAnimation("Attack");
+                    StartCoroutine(AttackCor(GetAnimationLength("Attack"), (result => isAttacking = result), isAttacking));
                 }
             }
         }
@@ -65,4 +74,14 @@ public class Player : MonoBehaviour,IAnimatable
         myVariableLambda(!currentValue);
         isMovableByPlayer = true;
     }
+
+    IEnumerator AttackCor(float animationLength, Action<bool> myVariableLambda, bool currentValue)
+    {
+        attackEffect.SetActive(true);
+        yield return new WaitForSeconds(animationLength);
+        myVariableLambda(!currentValue);
+        isMovableByPlayer = true;
+        attackEffect.SetActive(false);
+    }
+
 }
