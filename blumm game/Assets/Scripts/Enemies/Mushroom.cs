@@ -5,17 +5,24 @@ using UnityEngine;
 
 public class Mushroom : Enemy,IAnimatable
 {
+    private HealthSystem _healthSystem;
+
     public int idleCycles;
     public List<Transform> patrolPoints = new List<Transform>();
     private List<Vector3> _patrolpositions = new List<Vector3>();
-    private int _patrolPointIndex = 0;
 
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
+
     private bool _isIdle;
+    private bool _isAlive = true;
+    private int _patrolPointIndex = 0;
+
     // Start is called before the first frame update
     void Start()
     {
+        hpSys = GetComponent<HealthSystem>();
+        hpSys.OnDeathEvent += KillEnemy;
         for(int i=0;i<patrolPoints.Count;i++)
         {
             _patrolpositions.Add(patrolPoints[i].position);
@@ -25,7 +32,10 @@ public class Mushroom : Enemy,IAnimatable
     // Update is called once per frame
     void Update()
     {
-        if (patrolPoints.Count > 1) MoveToPatrolPoint();
+        if (_isAlive)
+        {
+            if (patrolPoints.Count > 1) MoveToPatrolPoint();
+        }
     }
 
 
@@ -63,10 +73,23 @@ public class Mushroom : Enemy,IAnimatable
         _isIdle = false;
     }
 
-
+    private void KillEnemy()
+    {
+        _isIdle = true;
+        PlayAnimation("Death");
+        StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Death"), (result) => _isAlive = result, _isAlive));
+    }
     private void RotateEnemy(int direction)
     {
         transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
+    }
+
+
+    IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue)
+    {
+        yield return new WaitForSeconds(animationLength);
+        myVariableLambda(!currentValue);
+        gameObject.SetActive(false);
     }
 
 
