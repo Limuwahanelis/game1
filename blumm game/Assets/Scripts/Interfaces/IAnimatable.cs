@@ -5,10 +5,9 @@ using UnityEngine;
 
 public interface IAnimatable
 {
-    public event Action<string> OnPlayAnimation;
+    public event Action<string,bool> OnPlayAnimation;
     public event Func<string,float> OnGetAnimationLength;
-    //public delegate void AnimationDelegate(string name);
 
-    void PlayAnimation(string name);
+    void PlayAnimation(string name,bool canBePlayedOver=true);
     float GetAnimationLength(string name);
 }

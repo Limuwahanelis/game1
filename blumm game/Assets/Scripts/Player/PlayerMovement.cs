@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
         {
             _player.isJumping = true;   
             _player.TakeControlFromPlayer(Player.Cause.JUMP);
-            _player.PlayAnimation("Jump");
+            _player.PlayAnimation("Jump",false);
             _player.StartCoroutine(_player.WaitForAnimationToEnd(_player.GetAnimationLength("Jump"), (result => _player.isJumping = result), _player.isJumping, Player.Cause.JUMP));
         }
     }
@@ -96,9 +96,7 @@ public class PlayerMovement : MonoBehaviour
         if (enemy.transform.position.x > transform.position.x) pushDirection = -1;
         Vector2 tmp = t2.position - transform.position;
         Vector2 pushVector = new Vector2(tmp.x * pushDirection, tmp.y)*_pushForce;
-        //Vector2 pf = new Vector2(pushDire.x, 1) * _pushForce;
         _rb.AddForce(pushVector,ForceMode2D.Impulse);
         StartCoroutine(_player.WaitForPlayerToLandOnGroundAfterPush());
-        //_rb.AddForce(Vector2.up * _pushForce);
     }
 }

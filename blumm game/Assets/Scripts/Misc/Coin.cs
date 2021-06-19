@@ -7,7 +7,7 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
     public CoinCustomSet set;
     public Action OnPickUpEvent;
 
-    public event Action<string> OnPlayAnimation;
+    public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
 
     public void Interact()
@@ -37,9 +37,9 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
         Interact();
     }
 
-    public void PlayAnimation(string name)
+    public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
-        OnPlayAnimation?.Invoke(name);
+        OnPlayAnimation?.Invoke(name, canBePlayedOver);
     }
 
     public float GetAnimationLength(string name)

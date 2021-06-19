@@ -10,7 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3b30064374c2634c995f079dfe40f74, type: 3}
-  m_Name: CoinsLevel
+  m_Name: CoinsInLevel
   m_EditorClassIdentifier: 
-  items:
-  - {fileID: 0}
+  items: []

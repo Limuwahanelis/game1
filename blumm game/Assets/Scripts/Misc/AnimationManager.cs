@@ -12,6 +12,10 @@ public class AnimationManager : MonoBehaviour
     private IAnimatable _objectToAnimate;
     public AnimatorController _animController;
     public List<string> stateNames = new List<string>();
+    private float _animLength;
+    private bool _animationEnded=true;
+    private bool _timerStarted;
+    private Coroutine currentTimer;
     private void Start()
     {
         _objectToAnimate = GetComponent<IAnimatable>();
@@ -29,7 +33,7 @@ public class AnimationManager : MonoBehaviour
         }
         
     }
-    public void PlayAnimation(string name)
+    public void PlayAnimation(string name,bool canBePlayedOver=true)
     {
         
         AnimatorState clipToPlay=null;
@@ -47,9 +51,22 @@ public class AnimationManager : MonoBehaviour
             return ;
         }
         if (_currentAnimation == clipToPlay.name) return;
-        _anim.Play(clipToPlay.nameHash);
-        _currentAnimation = clipToPlay.name;
-        return ;
+        if (!canBePlayedOver)
+        {
+
+            _animationEnded = false;
+            _animLength = clipToPlay.motion.averageDuration;
+            currentTimer=StartCoroutine(TimerCor(_animLength));
+            _anim.Play(clipToPlay.nameHash);
+            _currentAnimation = clipToPlay.name;
+        }
+        
+
+        if (_animationEnded)
+        {
+            _anim.Play(clipToPlay.nameHash);
+            _currentAnimation = clipToPlay.name;
+        }
     }
     private void OnDestroy()
     {
@@ -67,5 +84,14 @@ public class AnimationManager : MonoBehaviour
             }
         }
         return clipDuration;
+    }
+
+    IEnumerator TimerCor(float time)
+    {
+        if (_timerStarted) yield break;
+        else _timerStarted = true;
+        yield return new WaitForSeconds(time);
+        _animationEnded = true;
+        _timerStarted = false;
     }
 }

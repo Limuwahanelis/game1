@@ -28,9 +28,8 @@ public class Player : MonoBehaviour,IAnimatable
     public bool isFalling;
     public bool isAttacking;
     public bool isPushedBack;
-    public event Action<string> OnPlayAnimation;
+    public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
-    
 
 
     // Start is called before the first frame update
@@ -127,9 +126,8 @@ public class Player : MonoBehaviour,IAnimatable
         return (float)(OnGetAnimationLength?.Invoke(name));
     }
 
-    public void PlayAnimation(string name)
+    public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
-        OnPlayAnimation?.Invoke(name);
+        OnPlayAnimation?.Invoke(name,canBePlayedOver);
     }
-
 }

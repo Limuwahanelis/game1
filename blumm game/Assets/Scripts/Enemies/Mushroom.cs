@@ -18,7 +18,7 @@ public class Mushroom : Enemy, IAnimatable
     public List<Transform> patrolPoints = new List<Transform>();
     private List<Vector3> _patrolpositions = new List<Vector3>();
 
-    public event Action<string> OnPlayAnimation;
+    public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
 
     private bool _isAlive = true;
@@ -142,9 +142,9 @@ public class Mushroom : Enemy, IAnimatable
         }
         _isHit = false;
     }
-    public void PlayAnimation(string name)
+    public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
-        OnPlayAnimation?.Invoke(name);
+        OnPlayAnimation?.Invoke(name, canBePlayedOver);
     }
 
     public float GetAnimationLength(string name)
