@@ -53,12 +53,6 @@ public class Player : MonoBehaviour,IAnimatable
             {
                 if (isMoving) PlayAnimation("Walk");
                 else PlayAnimation("Idle");
-                if (isJumping)
-                {
-                    TakeControlFromPlayer(Cause.JUMP);
-                    PlayAnimation("Jump");
-                    StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Jump"), (result => isJumping = result), isJumping,Cause.JUMP));
-                }
                 if(isAttacking)
                 {
                     TakeControlFromPlayer(Cause.ATTACK);
@@ -102,7 +96,7 @@ public class Player : MonoBehaviour,IAnimatable
         playerMovement.StopPlayer();
         //rb.velocity = new Vector2(0, 0);
     }
-    IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue, Cause noControlReason)
+    public IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue, Cause noControlReason)
     {
         yield return new WaitForSeconds(animationLength);
         myVariableLambda(!currentValue);

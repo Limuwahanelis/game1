@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (direction != 0)
         {
-            if (_player.NoControlCause != Player.Cause.ENEMY)
+            if (_player.isMovableByPlayer)
             {
                 _rb.velocity = new Vector3(direction * _speed, _rb.velocity.y, 0);
                 if (direction > 0)
@@ -80,6 +80,9 @@ public class PlayerMovement : MonoBehaviour
         if (!_player.isJumping && _player.isOnGround)
         {
             _player.isJumping = true;   
+            _player.TakeControlFromPlayer(Player.Cause.JUMP);
+            _player.PlayAnimation("Jump");
+            _player.StartCoroutine(_player.WaitForAnimationToEnd(_player.GetAnimationLength("Jump"), (result => _player.isJumping = result), _player.isJumping, Player.Cause.JUMP));
         }
     }
 

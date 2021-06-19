@@ -25,6 +25,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!_player.isAttacking && _player.isOnGround)
         {
+            //_player.TakeControlFromPlayer(Player.Cause.ATTACK);
             _player.playerMovement.StopPlayer();
             Collider2D[] hitEnemies =Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyLayer);
             for(int i=0;i<hitEnemies.Length;i++)

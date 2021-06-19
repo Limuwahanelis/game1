@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class AnimationManager : MonoBehaviour
 {
 

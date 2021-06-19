@@ -27,7 +27,11 @@ public class Mushroom : Enemy,IAnimatable
     // Start is called before the first frame update
     void Start()
     {
-        if (patrolPoints.Count < 2) _isAtPatrolPoint = true;
+        if (patrolPoints.Count < 2)
+        {
+            _isAtPatrolPoint = true;
+            _isIdle = true;
+        }
         else
         {
             _isPatrolling = true;
@@ -39,6 +43,7 @@ public class Mushroom : Enemy,IAnimatable
         {
             _patrolpositions.Add(patrolPoints[i].position);
         }
+        RotateEnemyTowardsNextPatrolPoint();
     }
 
     // Update is called once per frame
@@ -56,7 +61,7 @@ public class Mushroom : Enemy,IAnimatable
                 {
                     if (_isAtPatrolPoint)
                     {
-                        if (idleCycles > 0 && !_isIdle) currentCor = StartCoroutine(IdleTimerCor(idleCycles));
+                        if ( !_isIdle) currentCor = StartCoroutine(IdleTimerCor(idleCycles));
                     }
                 }
             }

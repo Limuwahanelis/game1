@@ -1,31 +1,25 @@
 fileFormatVersion: 2
-guid: 6275a17c37ebb894cb48ae94d092033a
+guid: 33ae2b737bdf7b14589ecdbd7a724cd6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8897745980501446823
-    second: herochar_sword_attack_anim_strip_4_0
+      213: 5094933682615765287
+    second: coin_anim_strip_6_0
   - first:
-      213: -7505990266676396017
-    second: herochar_sword_attack_anim_strip_4_1
+      213: 6101928269482547967
+    second: coin_anim_strip_6_1
   - first:
-      213: -1132828116441169091
-    second: herochar_sword_attack_anim_strip_4_2
+      213: -8289930951752328157
+    second: coin_anim_strip_6_2
   - first:
-      213: -6827730267515372960
-    second: herochar_sword_attack_anim_strip_4_3
+      213: -3285289925518966143
+    second: coin_anim_strip_6_3
   - first:
-      213: 5625029279390528858
-    second: herochar_sword_attack_anim_strip_4_4
+      213: -4269440570820690029
+    second: coin_anim_strip_6_4
   - first:
-      213: 7674269874151547961
-    second: herochar_sword_attack_anim_strip_4_5
-  - first:
-      213: 6088978619006726344
-    second: herochar_sword_attack_anim_strip_4_6
-  - first:
-      213: 1864263324783057972
-    second: herochar_sword_attack_anim_strip_4_7
+      213: -4644181033338182443
+    second: coin_anim_strip_6_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -115,85 +109,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: herochar_sword_attack_anim_strip_4_0
+      name: coin_anim_strip_6_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 16
-      alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7a0d275b3d42b7b70800000000000000
-      internalID: 8897745980501446823
+      spriteID: 7294c72b037d4b640800000000000000
+      internalID: 5094933682615765287
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herochar_sword_attack_anim_strip_4_1
+      name: coin_anim_strip_6_1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffadb638e676ea450800000000000000
+      internalID: 6101928269482547967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_anim_strip_6_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32c5948a8bf34fc80800000000000000
+      internalID: -8289930951752328157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_anim_strip_6_3
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 182c54d083e4862d0800000000000000
+      internalID: -3285289925518966143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coin_anim_strip_6_4
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 32
-        height: 16
-      alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f00c633fe9d55d790800000000000000
-      internalID: -7505990266676396017
+      spriteID: 39f779adb66efb4c0800000000000000
+      internalID: -4269440570820690029
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: herochar_sword_attack_anim_strip_4_2
+      name: coin_anim_strip_6_5
       rect:
         serializedVersion: 2
-        x: 64
+        x: 40
         y: 0
-        width: 32
-        height: 16
-      alignment: 9
-      pivot: {x: 0.25, y: 0.5}
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d3303ff74d26740f0800000000000000
-      internalID: -1132828116441169091
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: herochar_sword_attack_anim_strip_4_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 16
-      alignment: 9
-      pivot: {x: 0.25, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 06a309e1f770f31a0800000000000000
-      internalID: -6827730267515372960
+      spriteID: 5d46543c4fd8c8fb0800000000000000
+      internalID: -4644181033338182443
       vertices: []
       indices: 
       edges: []

@@ -8,11 +8,13 @@ public class HealthBar : MonoBehaviour
 {
     public List<PlayerLife> lives = new List<PlayerLife>();
     public IntReference currentHP;
-    public float heartDistance;
+    
     public PlayerLife playerLifePrefab;
+    public float heartDistance;
     private int _previousHealth;
     private void Start()
     {
+        heartDistance = playerLifePrefab.GetComponent<RectTransform>().rect.width/2 +10;
         _previousHealth = currentHP.value;
         if (lives.Count < currentHP.value)
         {
