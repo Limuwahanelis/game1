@@ -41,7 +41,7 @@ public class PlayerCombat : MonoBehaviour
     {
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
-    public void StartInvincibiltyTime()
+    public void PlayerHit()
     {
         StartCoroutine(InvincibilityCor());
     }

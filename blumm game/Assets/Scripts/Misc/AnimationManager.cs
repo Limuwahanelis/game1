@@ -15,7 +15,7 @@ public class AnimationManager : MonoBehaviour
     private float _animLength;
     private bool _animationEnded=true;
     private bool _timerStarted;
-    private Coroutine currentTimer;
+    private Coroutine _currentTimer;
     private void Start()
     {
         _objectToAnimate = GetComponent<IAnimatable>();
@@ -56,18 +56,43 @@ public class AnimationManager : MonoBehaviour
 
             _animationEnded = false;
             _animLength = clipToPlay.motion.averageDuration;
-            currentTimer=StartCoroutine(TimerCor(_animLength));
+            _currentTimer=StartCoroutine(TimerCor(_animLength));
             _anim.Play(clipToPlay.nameHash);
             _currentAnimation = clipToPlay.name;
         }
         
-
         if (_animationEnded)
         {
             _anim.Play(clipToPlay.nameHash);
             _currentAnimation = clipToPlay.name;
         }
     }
+
+    public void OverPlayAnimation(string name)
+    {
+        AnimatorState clipToPlay = null;
+        for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
+        {
+            if (_animController.layers[0].stateMachine.states[i].state.name == name)
+            {
+                clipToPlay = _animController.layers[0].stateMachine.states[i].state;
+            }
+        }
+
+        if (clipToPlay == null)
+        {
+            Debug.LogError("There is no state with name: " + name);
+            return;
+        }
+        if (_currentAnimation == clipToPlay.name) return;
+        StopCoroutine(_currentTimer);
+        _animationEnded = true;
+        _timerStarted = false;
+
+        _anim.Play(clipToPlay.nameHash);
+        _currentAnimation = clipToPlay.name;
+    }
+
     private void OnDestroy()
     {
         _objectToAnimate.OnPlayAnimation -= PlayAnimation;
