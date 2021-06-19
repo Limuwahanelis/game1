@@ -105,11 +105,9 @@ public class Player : MonoBehaviour,IAnimatable
 
     IEnumerator AttackCor(float animationLength, Action<bool> myVariableLambda, bool currentValue)
     {
-        attackEffect.SetActive(true);
         yield return new WaitForSeconds(animationLength);
         myVariableLambda(!currentValue);
         ReturnControlToPlayer(Cause.ATTACK);
-        attackEffect.SetActive(false);
     }
 
     public IEnumerator WaitForPlayerToLandOnGroundAfterPush()
