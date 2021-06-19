@@ -30,8 +30,6 @@ public class Player : MonoBehaviour,IAnimatable
     public bool isPushedBack;
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
-
-    public GameObject attackEffect;
     
 
 
