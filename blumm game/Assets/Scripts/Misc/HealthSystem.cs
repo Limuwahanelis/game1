@@ -9,9 +9,9 @@ public class HealthSystem : MonoBehaviour, IDamagable,IPushable
     public bool isInvincible;
     public IntReference maxHP;
     public IntReference currentHP;
-    public Action OnHitEvent;
-    public Action OnDeathEvent;
-    public Action<GameObject> OnPushEvent;
+    public Action OnHit;
+    public Action OnDeath;
+    public Action<GameObject> OnPush;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,18 +27,18 @@ public class HealthSystem : MonoBehaviour, IDamagable,IPushable
                 Kill();
                 return;
             }
-            OnHitEvent?.Invoke();
+            OnHit?.Invoke();
         }
     }
 
     public virtual void Kill()
     {
-        if (OnDeathEvent == null) Destroy(gameObject);
-        else OnDeathEvent.Invoke();
+        if (OnDeath == null) Destroy(gameObject);
+        else OnDeath.Invoke();
     }
 
     public void Push(GameObject pusher)
     {
-        OnPushEvent?.Invoke(pusher);
+        OnPush?.Invoke(pusher);
     }
 }

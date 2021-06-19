@@ -8,6 +8,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
 
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
+    public event Action<string> OnOverPlayAnimation;
 
     private bool _isAlive = true;
     private bool _isHit = false;
@@ -70,8 +71,8 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     protected override void SetUpComponents()
     {
         hpSys = GetComponent<HealthSystem>();
-        hpSys.OnDeathEvent += KillEnemy;
-        hpSys.OnHitEvent += HitEnemy;
+        hpSys.OnDeath += KillEnemy;
+        hpSys.OnHit += HitEnemy;
     }
     IEnumerator IdleTimerCor(int numbeOfIdleCycles)
     {

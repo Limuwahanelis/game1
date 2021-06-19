@@ -84,7 +84,7 @@ public class AnimationManager : MonoBehaviour
             Debug.LogError("There is no state with name: " + name);
             return;
         }
-        if (_currentAnimation == clipToPlay.name) return;
+        //if (_currentAnimation == clipToPlay.name) return;
         StopCoroutine(_currentTimer);
         _animationEnded = true;
         _timerStarted = false;

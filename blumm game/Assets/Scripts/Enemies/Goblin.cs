@@ -16,6 +16,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
 
     public event Action<string, bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
+    public event Action<string> OnOverPlayAnimation;
 
     private bool _isAlive = true;
     private bool _isHit = false;

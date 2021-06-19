@@ -30,6 +30,7 @@ public class Player : MonoBehaviour,IAnimatable
     public bool isPushedBack;
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
+    public event Action<string> OnOverPlayAnimation;
 
 
     // Start is called before the first frame update
@@ -37,9 +38,9 @@ public class Player : MonoBehaviour,IAnimatable
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<HealthSystem>();
-        playerHealth.OnHitEvent +=playerCombat.PlayerHit;
-        playerHealth.OnPushEvent+= playerMovement.CollidedWithEnemy;
-        playerHealth.OnDeathEvent += () => { };
+        playerHealth.OnHit +=playerCombat.PlayerHit;
+        playerHealth.OnPush+= playerMovement.CollidedWithEnemy;
+        playerHealth.OnDeath += () => { };
     }
 
     // Update is called once per frame
@@ -130,5 +131,10 @@ public class Player : MonoBehaviour,IAnimatable
     public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
         OnPlayAnimation?.Invoke(name,canBePlayedOver);
+    }
+
+    public void OverPlayAnimation(string name)
+    {
+        OnOverPlayAnimation?.Invoke(name);
     }
 }
