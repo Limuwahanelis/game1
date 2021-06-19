@@ -28,6 +28,7 @@ public class Player : MonoBehaviour,IAnimatable
     public bool isFalling;
     public bool isAttacking;
     public bool isPushedBack;
+    public bool isHit;
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
@@ -50,14 +51,17 @@ public class Player : MonoBehaviour,IAnimatable
         {
             if (isOnGround)
             {
-                if (isMoving) PlayAnimation("Walk");
-                else PlayAnimation("Idle");
-                if(isAttacking)
-                {
-                    TakeControlFromPlayer(Cause.ATTACK);
-                    PlayAnimation("Attack");
-                    StartCoroutine(AttackCor(GetAnimationLength("Attack"), (result => isAttacking = result), isAttacking));
-                }
+               // if (!isHit)
+               // {
+                    if (isMoving) PlayAnimation("Walk");
+                    else PlayAnimation("Idle");
+                    if (isAttacking)
+                    {
+                        TakeControlFromPlayer(Cause.ATTACK);
+                        PlayAnimation("Attack");
+                        StartCoroutine(AttackCor(GetAnimationLength("Attack"), (result => isAttacking = result), isAttacking));
+                    }
+                //}
             }
         }
         if (!isOnGround)
@@ -111,7 +115,7 @@ public class Player : MonoBehaviour,IAnimatable
 
     public IEnumerator WaitForPlayerToLandOnGroundAfterPush()
     {
-        PlayAnimation("Push");
+        PlayAnimation("Hit");
         while (isOnGround)
         {
             yield return null;

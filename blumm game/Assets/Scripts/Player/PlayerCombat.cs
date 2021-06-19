@@ -43,6 +43,9 @@ public class PlayerCombat : MonoBehaviour
     }
     public void PlayerHit()
     {
+        _player.TakeControlFromPlayer(Player.Cause.ENEMY);
+        StartCoroutine(_player.WaitForAnimationToEnd(_player.GetAnimationLength("Hit"), (bool a) => { }, false, Player.Cause.ENEMY));
+        _player.OverPlayAnimation("Hit");
         StartCoroutine(InvincibilityCor());
     }
     private IEnumerator InvincibilityCor()

@@ -21,6 +21,7 @@ public class AnimationManager : MonoBehaviour
         _objectToAnimate = GetComponent<IAnimatable>();
        _objectToAnimate.OnPlayAnimation += PlayAnimation;
         _objectToAnimate.OnGetAnimationLength += GetStateLength;
+        _objectToAnimate.OnOverPlayAnimation+= OverPlayAnimation;
        _anim = GetComponent<Animator>();
         
     }
@@ -85,7 +86,7 @@ public class AnimationManager : MonoBehaviour
             return;
         }
         //if (_currentAnimation == clipToPlay.name) return;
-        StopCoroutine(_currentTimer);
+        if(_currentTimer!=null) StopCoroutine(_currentTimer);
         _animationEnded = true;
         _timerStarted = false;
 

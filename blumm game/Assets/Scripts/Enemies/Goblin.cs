@@ -113,7 +113,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
             }
             yield return null;
         }
-
+        yield return null;
     }
     protected override void SetPlayerInRange()
     {
