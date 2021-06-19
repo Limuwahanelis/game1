@@ -283,9 +283,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351ebf51480c7664dae2bbe53e712905, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInvincible: 0
   maxHP:
     useConstant: 1
-    constantValue: 0
+    constantValue: 3
     variable: {fileID: 0}
   currentHP:
     useConstant: 1
@@ -347,3 +348,5 @@ MonoBehaviour:
   stateNames:
   - Idle
   - Move
+  - Death
+  - Hit

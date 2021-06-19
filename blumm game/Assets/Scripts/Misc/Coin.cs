@@ -12,21 +12,14 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
 
     public void Interact()
     {
-        set.Remove(this);
-        OnPickUpEvent?.Invoke();
-        Destroy(gameObject);
+        PlayAnimation("PickUp");
+        StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("PickUp")));
     }
 
     // Start is called before the first frame update
     void Awake()
     {
         set.Add(this);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnEnable()
@@ -46,11 +39,19 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
 
     public void PlayAnimation(string name)
     {
-        throw new NotImplementedException();
+        OnPlayAnimation?.Invoke(name);
     }
 
     public float GetAnimationLength(string name)
     {
-        throw new NotImplementedException();
+        return (float)OnGetAnimationLength?.Invoke(name);
+    }
+
+    IEnumerator WaitForAnimationToEnd(float time)
+    {
+        yield return new WaitForSeconds(time);
+        OnPickUpEvent?.Invoke();
+        set.Remove(this);
+        Destroy(gameObject);
     }
 }

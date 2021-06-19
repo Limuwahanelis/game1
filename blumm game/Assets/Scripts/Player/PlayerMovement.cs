@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public Transform t1;
     public Transform t2;
 
     private Player _player;
@@ -27,9 +26,6 @@ public class PlayerMovement : MonoBehaviour
 
         _player = GetComponent<Player>();
         _rb = GetComponent<Rigidbody2D>();
-        Vector2 pf = t2.position - t1.position;
-        //Vector2 pf = new Vector2(pushDire.x, 1) * _pushForce;
-        //_rb.AddForce(pf * _pushForce, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -98,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         _player.isPushedBack = true;
         float pushDirection = 1;
         if (enemy.transform.position.x > transform.position.x) pushDirection = -1;
-        Vector2 tmp = t2.position - t1.position;
+        Vector2 tmp = t2.position - transform.position;
         Vector2 pushVector = new Vector2(tmp.x * pushDirection, tmp.y)*_pushForce;
         //Vector2 pf = new Vector2(pushDire.x, 1) * _pushForce;
         _rb.AddForce(pushVector,ForceMode2D.Impulse);

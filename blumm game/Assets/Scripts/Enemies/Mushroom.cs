@@ -3,8 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mushroom : Enemy,IAnimatable
+public class Mushroom : Enemy, IAnimatable
 {
+    public enum State
+    {
+        ALWAYS_IDLE,
+        PATROLLING,
+        IDLE_AT_PATROL_POINT
+    }
+    private State currentState;
     private HealthSystem _healthSystem;
 
     public int idleCycles;
@@ -14,11 +21,9 @@ public class Mushroom : Enemy,IAnimatable
     public event Action<string> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
 
-    private bool _isIdle;
-    private bool _isPatrolling;
     private bool _isAlive = true;
-    private bool _isAtPatrolPoint = false;
     private bool _isHit = false;
+    private bool _isIdle = false;
     private int _patrolPointIndex = 0;
 
 
@@ -27,23 +32,25 @@ public class Mushroom : Enemy,IAnimatable
     // Start is called before the first frame update
     void Start()
     {
-        if (patrolPoints.Count < 2)
-        {
-            _isAtPatrolPoint = true;
-            _isIdle = true;
-        }
-        else
-        {
-            _isPatrolling = true;
-        }
         hpSys = GetComponent<HealthSystem>();
         hpSys.OnDeathEvent += KillEnemy;
         hpSys.OnHitEvent += HitEnemy;
-        for(int i=0;i<patrolPoints.Count;i++)
+        for (int i = 0; i < patrolPoints.Count; i++)
         {
             _patrolpositions.Add(patrolPoints[i].position);
         }
-        RotateEnemyTowardsNextPatrolPoint();
+        if (patrolPoints.Count < 2)
+        {
+            currentState = State.ALWAYS_IDLE;
+        }
+        else
+        {
+            currentState = State.PATROLLING;
+            RotateEnemyTowardsNextPatrolPoint();
+        }
+
+
+        
     }
 
     // Update is called once per frame
@@ -53,17 +60,8 @@ public class Mushroom : Enemy,IAnimatable
         {
             if (!_isHit)
             {
-                if (_isPatrolling)
-                {
-                    MoveToPatrolPoint();
-                }
-                else
-                {
-                    if (_isAtPatrolPoint)
-                    {
-                        if ( !_isIdle) currentCor = StartCoroutine(IdleTimerCor(idleCycles));
-                    }
-                }
+                if (currentState == State.PATROLLING) MoveToPatrolPoint();
+                if (currentState == State.IDLE_AT_PATROL_POINT|| currentState==State.ALWAYS_IDLE) StartCoroutine(IdleTimerCor(idleCycles));
             }
         }
         else
@@ -82,12 +80,12 @@ public class Mushroom : Enemy,IAnimatable
         {
             if (_patrolPointIndex + 1 > _patrolpositions.Count - 1) _patrolPointIndex = 0;
             else _patrolPointIndex++;
-            _isPatrolling = false;
-            _isAtPatrolPoint = true;
+            currentState = State.IDLE_AT_PATROL_POINT;
         }
     }
     private void KillEnemy()
     {
+        _isHit = true;
         StopCurrentActions();
         PlayAnimation("Death");
         StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Death"), (result) => _isAlive = result, _isAlive));
@@ -111,25 +109,20 @@ public class Mushroom : Enemy,IAnimatable
     }
     private void StopCurrentActions()
     {
-        _isIdle = false;
-        _isPatrolling = false;
-        StopCoroutine(currentCor);
-    }
-    private void ResumeActions()
-    {
-        _isHit = false;
-        if (_isAtPatrolPoint) currentCor = StartCoroutine(IdleTimerCor(idleCycles));
-        else _isPatrolling = true;
+       if(currentCor!=null) StopCoroutine(currentCor);
     }
     IEnumerator IdleTimerCor(int numbeOfIdleCycles)
     {
-        _isIdle = true;
+        if(_isIdle) yield break ;
+        else _isIdle = true;
         PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
-        _isPatrolling = true;
-        _isAtPatrolPoint = false;
-        RotateEnemyTowardsNextPatrolPoint();
+        if (currentState == State.IDLE_AT_PATROL_POINT)
+        {
+            currentState = State.PATROLLING;
+            RotateEnemyTowardsNextPatrolPoint();
+        }
     }
     IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue)
     {
@@ -142,13 +135,12 @@ public class Mushroom : Enemy,IAnimatable
         PlayAnimation("Hit");
         yield return new WaitForSeconds(GetAnimationLength("Hit"));
         hpSys.isInvincible = false;
-        if (!_isAtPatrolPoint)
+        if (currentState==State.PATROLLING)
         {
             PlayAnimation("Idle");
             yield return new WaitForSeconds(GetAnimationLength("Idle"));
         }
-        
-        ResumeActions();
+        _isHit = false;
     }
     public void PlayAnimation(string name)
     {

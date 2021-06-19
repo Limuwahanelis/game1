@@ -14,10 +14,12 @@ public class PlayerCoinManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        numberOfCoins.value = 0;
         for(int i=0;i<coins.items.Count;i++)
         {
             coins.items[i].OnPickUpEvent = CollectCoin;
-
+            onesNum.sprite = numberSprites[numberOfCoins.value % 10];
+            tensNum.sprite = numberSprites[numberOfCoins.value / 10];
         }
     }
 
