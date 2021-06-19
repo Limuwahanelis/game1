@@ -92,9 +92,10 @@ public class Goblin : PatrollingEnemy, IAnimatable
     public void StartCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = true;
+        StartCoroutine( WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
         StartCoroutine(CheckForPlayerColliderCor());
     }
-    public void StopCheckingForPlaterCol()
+    public void StopCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = false;
     }
@@ -114,6 +115,12 @@ public class Goblin : PatrollingEnemy, IAnimatable
             yield return null;
         }
         yield return null;
+    }
+
+    IEnumerator WaitSomeTimeAndDoSmth(float timeToWait,Action functionToPerform)
+    {
+        yield return new WaitForSeconds(timeToWait);
+        functionToPerform();
     }
     protected override void SetPlayerInRange()
     {
