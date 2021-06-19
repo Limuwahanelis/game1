@@ -41,7 +41,13 @@ public class Goblin : PatrollingEnemy, IAnimatable
         SetUpBehaviour();
         SetUpComponents();
     }
-
+    protected override void SetUpComponents()
+    {
+        hpSys = GetComponent<HealthSystem>();
+        _detection = GetComponentInChildren<PlayerDetection>();
+        _detection.OnPlayerDetected = SetPlayerInRange;
+        _detection.OnPlayerLeft = SetPlayerNotInRange;
+    }
     protected override void SetUpBehaviour()
     {
         base.SetUpBehaviour();
@@ -75,10 +81,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
             Destroy(gameObject);
         }
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(_attackTransform.position, new Vector3(_attackRangeX, _attackRangeY));
-    }
+
     IEnumerator IdleTimerCor(int numbeOfIdleCycles)
     {
         if (_isIdle) yield break;
@@ -92,13 +95,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
-    protected override void SetUpComponents()
-    {
-        hpSys = GetComponent<HealthSystem>();
-        _detection = GetComponentInChildren<PlayerDetection>();
-        _detection.OnPlayerDetected = SetPlayerInRange;
-        _detection.OnPlayerLeft = SetPlayerNotInRange;
-    }
+
 
     private void Attack()
     {
@@ -111,18 +108,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
         }));
     }
     
-    public void StartCheckingForPlayerCol()
-    {
-        _isCheckingForPlayerCol = true;
-        StartCoroutine( WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
-        StartCoroutine(CheckForPlayerColliderCor());
-    }
-    public void StopCheckingForPlayerCol()
-    {
-        _isCheckingForPlayerCol = false;
-        //StartCoroutine(WaitSomeTimeAndDoSmth(_attackCooldown, StopAttacking));
 
-    }
     IEnumerator CheckForPlayerColliderCor()
     {
         while(_isCheckingForPlayerCol)
@@ -146,6 +132,17 @@ public class Goblin : PatrollingEnemy, IAnimatable
         yield return new WaitForSeconds(timeToWait);
         functionToPerform();
     }
+    public void StartCheckingForPlayerCol()
+    {
+        _isCheckingForPlayerCol = true;
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
+        StartCoroutine(CheckForPlayerColliderCor());
+    }
+    public void StopCheckingForPlayerCol()
+    {
+        _isCheckingForPlayerCol = false;
+    }
+
     protected override void SetPlayerInRange()
     {
         StopCurrentActions();
@@ -176,5 +173,10 @@ public class Goblin : PatrollingEnemy, IAnimatable
     public float GetAnimationLength(string name)
     {
         return (float)OnGetAnimationLength?.Invoke(name);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(_attackTransform.position, new Vector3(_attackRangeX, _attackRangeY));
     }
 }

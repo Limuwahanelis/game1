@@ -13,5 +13,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void SetPlayerInRange() {}
     protected virtual void SetPlayerNotInRange() { }
-    protected virtual void SetUpComponents() { }
+    protected virtual void SetUpComponents()
+    {
+        hpSys = GetComponent<HealthSystem>();
+    }
 }
