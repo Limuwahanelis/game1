@@ -9,6 +9,7 @@ public class Player : MonoBehaviour,IAnimatable
     {
         NONE,
         ENEMY,
+        COLLISION,
         OVERRIDE,
         ATTACK,
         JUMP,
@@ -97,7 +98,6 @@ public class Player : MonoBehaviour,IAnimatable
         isMovableByPlayer = false;
         NoControlCause = takeAwayCause;
         playerMovement.StopPlayer();
-        //rb.velocity = new Vector2(0, 0);
     }
     public IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue, Cause noControlReason)
     {
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour,IAnimatable
         {
             yield return null;
         }
-        ReturnControlToPlayer(Cause.ENEMY);
+        ReturnControlToPlayer(Cause.COLLISION);
         isPushedBack = false;
     }
     public float GetAnimationLength(string name)

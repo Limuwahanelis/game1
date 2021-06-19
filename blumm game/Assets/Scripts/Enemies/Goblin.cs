@@ -18,11 +18,16 @@ public class Goblin : PatrollingEnemy, IAnimatable
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
 
+    private EnemyStates.State _previousState;
+
     private bool _isAlive = true;
     private bool _isHit = false;
     private bool _isIdle = false;
     private bool _isCheckingForPlayerCol;
     private bool _isAttacking;
+
+    [SerializeField]
+    private float _attackCooldown;
     private Coroutine currentCor = null;
 
     private PlayerDetection _detection;
@@ -32,8 +37,15 @@ public class Goblin : PatrollingEnemy, IAnimatable
     // Start is called before the first frame update
     void Start()
     {
+        
         SetUpBehaviour();
         SetUpComponents();
+    }
+
+    protected override void SetUpBehaviour()
+    {
+        base.SetUpBehaviour();
+        _previousState = currentState;
     }
 
     // Update is called once per frame
@@ -41,16 +53,20 @@ public class Goblin : PatrollingEnemy, IAnimatable
     {
         if (_isAlive)
         {
-            if (!_isHit || !_isAttacking)
+            if (!_isHit)
             {
-                if (currentState == PatrolState.PATROLLING)
+                if (currentState == EnemyStates.State.PATROLLING)
                 {
                     PlayAnimation("Move");
                     MoveToPatrolPoint();
                 }
-                if (currentState == PatrolState.IDLE_AT_PATROL_POINT || currentState == PatrolState.ALWAYS_IDLE)
+                if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT || currentState == EnemyStates.State.ALWAYS_IDLE)
                 {
-                   currentCor=StartCoroutine(IdleTimerCor(idleCycles));
+                    currentCor = StartCoroutine(IdleTimerCor(idleCycles));
+                }
+                if(currentState== EnemyStates.State.ATTACKING)
+                {
+                    Attack();
                 }
             }
         }
@@ -70,9 +86,9 @@ public class Goblin : PatrollingEnemy, IAnimatable
         PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
-        if (currentState == PatrolState.IDLE_AT_PATROL_POINT)
+        if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT)
         {
-            currentState = PatrolState.PATROLLING;
+            currentState = EnemyStates.State.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
@@ -86,9 +102,15 @@ public class Goblin : PatrollingEnemy, IAnimatable
 
     private void Attack()
     {
+        if (_isAttacking) return;
         _isAttacking = true;
         PlayAnimation("Attack");
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), () => 
+        { 
+            PlayAnimation("Idle"); StartCoroutine(WaitSomeTimeAndDoSmth(_attackCooldown, () => { _isAttacking = false; })); 
+        }));
     }
+    
     public void StartCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = true;
@@ -98,6 +120,8 @@ public class Goblin : PatrollingEnemy, IAnimatable
     public void StopCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = false;
+        //StartCoroutine(WaitSomeTimeAndDoSmth(_attackCooldown, StopAttacking));
+
     }
     IEnumerator CheckForPlayerColliderCor()
     {
@@ -129,11 +153,20 @@ public class Goblin : PatrollingEnemy, IAnimatable
     }
     protected override void SetPlayerNotInRange()
     {
-        
+        ResumeActions();
     }
     private void StopCurrentActions()
     {
         if (currentCor != null) StopCoroutine(currentCor);
+        _previousState = currentState;
+        _isIdle = false;
+        currentState = EnemyStates.State.ATTACKING;
+    }
+
+    private void ResumeActions()
+    {
+        currentState = _previousState;
+        _isAttacking = false;
     }
     public void PlayAnimation(string name, bool canBePlayedOver = true)
     {

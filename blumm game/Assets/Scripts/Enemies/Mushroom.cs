@@ -32,12 +32,12 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         {
             if (!_isHit)
             {
-                if (currentState == PatrolState.PATROLLING)
+                if (currentState == EnemyStates.State.PATROLLING)
                 {
                     PlayAnimation("Move");
                     MoveToPatrolPoint();
                 }
-                if (currentState == PatrolState.IDLE_AT_PATROL_POINT || currentState == PatrolState.ALWAYS_IDLE)
+                if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT || currentState == EnemyStates.State.ALWAYS_IDLE)
                 {
                    currentCor= StartCoroutine(IdleTimerCor(idleCycles));
                 }
@@ -59,6 +59,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     private void HitEnemy()
     {
         _isHit = true;
+        _isIdle = false;
         StopCurrentActions();
         hpSys.isInvincible = true;
         StartCoroutine(EnemyHitCor());
@@ -81,9 +82,9 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
-        if (currentState == PatrolState.IDLE_AT_PATROL_POINT)
+        if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT)
         {
-            currentState = PatrolState.PATROLLING;
+            currentState = EnemyStates.State.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
@@ -98,7 +99,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         PlayAnimation("Hit");
         yield return new WaitForSeconds(GetAnimationLength("Hit"));
         hpSys.isInvincible = false;
-        if (currentState==PatrolState.PATROLLING)
+        if (currentState== EnemyStates.State.PATROLLING)
         {
             PlayAnimation("Idle");
             yield return new WaitForSeconds(GetAnimationLength("Idle"));
@@ -119,6 +120,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     {
         IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
         IPushable tmp2 = collision.gameObject.GetComponentInParent<IPushable>();
+        
         if (tmp != null)
         {
             tmp.TakeDamage(collisionDmg);
@@ -126,8 +128,4 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         }
         if (tmp2 != null) tmp2.Push(gameObject);
     }
-    //private void OnTriggerEnter2D(Collision2D collision)
-    //{
-
-    //}
 }

@@ -344,7 +344,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.4021492, y: 0}
@@ -948,6 +948,7 @@ MonoBehaviour:
   isFalling: 0
   isAttacking: 0
   isPushedBack: 0
+  isHit: 0
 --- !u!50 &866464040
 Rigidbody2D:
   serializedVersion: 4
@@ -1040,7 +1041,7 @@ MonoBehaviour:
   - In air
   - Fall
   - Attack
-  - Push
+  - Hit
 --- !u!114 &866464045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,6 +1074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackPos: {fileID: 1030589733}
   attackRange: 0.3
+  InvincibilityTime: 1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1146,7 +1148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1027263199}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.6963918, y: 0.39332238, z: -0.89353204}
+  m_LocalPosition: {x: -2.6963918, y: -0.46, z: -0.89353204}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 459606623}
@@ -1166,7 +1168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0
-  dmg: 0
+  dmg: 1
+  collisionDmg: 1
   idleCycles: 0
   patrolPoints: []
   _attackRangeX: 0.5
@@ -1174,7 +1177,8 @@ MonoBehaviour:
   _attackTransform: {fileID: 538937249}
   playerCoreLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+  _attackCooldown: 5
 --- !u!114 &1027263203
 MonoBehaviour:
   m_ObjectHideFlags: 0

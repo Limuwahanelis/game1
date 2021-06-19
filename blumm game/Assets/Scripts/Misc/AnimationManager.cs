@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
-
+using System;
 [RequireComponent(typeof(Animator))]
 public class AnimationManager : MonoBehaviour
 {
@@ -13,9 +13,10 @@ public class AnimationManager : MonoBehaviour
     public AnimatorController _animController;
     public List<string> stateNames = new List<string>();
     private float _animLength;
-    private bool _animationEnded=true;
+    private bool _overPlayAnimationEnded=true;
     private bool _timerStarted;
     private Coroutine _currentTimer;
+    private bool _animationEnded;
     private void Start()
     {
         _objectToAnimate = GetComponent<IAnimatable>();
@@ -55,15 +56,17 @@ public class AnimationManager : MonoBehaviour
         if (!canBePlayedOver)
         {
 
-            _animationEnded = false;
+            _overPlayAnimationEnded = false;
             _animLength = clipToPlay.motion.averageDuration;
-            _currentTimer=StartCoroutine(TimerCor(_animLength));
+            _currentTimer=StartCoroutine(TimerCor(_animLength,SetOverPlayAnimAsEnded));
             _anim.Play(clipToPlay.nameHash);
             _currentAnimation = clipToPlay.name;
         }
         
-        if (_animationEnded)
+        if (_overPlayAnimationEnded)
         {
+            _animLength = clipToPlay.motion.averageDuration;
+            StartCoroutine(TimerCor( _animLength, SetNormalAnimAsEneded));
             _anim.Play(clipToPlay.nameHash);
             _currentAnimation = clipToPlay.name;
         }
@@ -87,7 +90,7 @@ public class AnimationManager : MonoBehaviour
         }
         //if (_currentAnimation == clipToPlay.name) return;
         if(_currentTimer!=null) StopCoroutine(_currentTimer);
-        _animationEnded = true;
+        _overPlayAnimationEnded = true;
         _timerStarted = false;
 
         _anim.Play(clipToPlay.nameHash);
@@ -112,12 +115,22 @@ public class AnimationManager : MonoBehaviour
         return clipDuration;
     }
 
-    IEnumerator TimerCor(float time)
+    IEnumerator TimerCor(float time,Action functionToPerform)
     {
-        if (_timerStarted) yield break;
-        else _timerStarted = true;
+        //if (_timerStarted) yield break;
+        //else _timerStarted = true;
         yield return new WaitForSeconds(time);
-        _animationEnded = true;
+        functionToPerform();
+    }
+
+    private void SetOverPlayAnimAsEnded()
+    {
+        _overPlayAnimationEnded = true;
         _timerStarted = false;
     }
+    private void SetNormalAnimAsEneded()
+    {
+        _currentAnimation = null;
+    }
+
 }

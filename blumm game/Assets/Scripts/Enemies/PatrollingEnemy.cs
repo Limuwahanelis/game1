@@ -4,13 +4,7 @@ using UnityEngine;
 
 public class PatrollingEnemy : Enemy
 {
-    public enum PatrolState
-    {
-        ALWAYS_IDLE,
-        PATROLLING,
-        IDLE_AT_PATROL_POINT
-    }
-    protected PatrolState currentState;
+    protected EnemyStates.State currentState;
 
     public int idleCycles;
     public List<Transform> patrolPoints = new List<Transform>();
@@ -25,7 +19,7 @@ public class PatrollingEnemy : Enemy
         {
             if (_patrolPointIndex + 1 > _patrolpositions.Count - 1) _patrolPointIndex = 0;
             else _patrolPointIndex++;
-            currentState = PatrolState.IDLE_AT_PATROL_POINT;
+            currentState = EnemyStates.State.IDLE_AT_PATROL_POINT;
         }
     }
 
@@ -39,7 +33,7 @@ public class PatrollingEnemy : Enemy
         transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
     }
 
-    protected void SetUpBehaviour()
+    protected virtual void SetUpBehaviour()
     {
 
         for (int i = 0; i < patrolPoints.Count; i++)
@@ -48,11 +42,11 @@ public class PatrollingEnemy : Enemy
         }
         if (patrolPoints.Count < 2)
         {
-            currentState = PatrolState.ALWAYS_IDLE;
+            currentState = EnemyStates.State.ALWAYS_IDLE;
         }
         else
         {
-            currentState = PatrolState.PATROLLING;
+            currentState = EnemyStates.State.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }

@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public void CollidedWithEnemy(GameObject enemy)
     {
-        _player.TakeControlFromPlayer(Player.Cause.ENEMY);
+        _player.TakeControlFromPlayer(Player.Cause.COLLISION);
         _player.isPushedBack = true;
         float pushDirection = 1;
         if (enemy.transform.position.x > transform.position.x) pushDirection = -1;
