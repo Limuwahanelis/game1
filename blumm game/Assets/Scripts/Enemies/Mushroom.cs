@@ -31,14 +31,14 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         {
             if (!_isHit)
             {
-                if (currentState == State.PATROLLING)
+                if (currentState == PatrolState.PATROLLING)
                 {
                     PlayAnimation("Move");
                     MoveToPatrolPoint();
                 }
-                if (currentState == State.IDLE_AT_PATROL_POINT || currentState == State.ALWAYS_IDLE)
+                if (currentState == PatrolState.IDLE_AT_PATROL_POINT || currentState == PatrolState.ALWAYS_IDLE)
                 {
-                    StartCoroutine(IdleTimerCor(idleCycles));
+                   currentCor= StartCoroutine(IdleTimerCor(idleCycles));
                 }
             }
         }
@@ -55,7 +55,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Death"), (result) => _isAlive = result, _isAlive));
     }
 
-    private void HitEnemy(GameObject dmgSource)
+    private void HitEnemy()
     {
         _isHit = true;
         StopCurrentActions();
@@ -67,7 +67,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
        if(currentCor!=null) StopCoroutine(currentCor);
     }
 
-    private void SetUpComponents()
+    protected override void SetUpComponents()
     {
         hpSys = GetComponent<HealthSystem>();
         hpSys.OnDeathEvent += KillEnemy;
@@ -80,9 +80,9 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
-        if (currentState == State.IDLE_AT_PATROL_POINT)
+        if (currentState == PatrolState.IDLE_AT_PATROL_POINT)
         {
-            currentState = State.PATROLLING;
+            currentState = PatrolState.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
@@ -97,7 +97,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         PlayAnimation("Hit");
         yield return new WaitForSeconds(GetAnimationLength("Hit"));
         hpSys.isInvincible = false;
-        if (currentState==State.PATROLLING)
+        if (currentState==PatrolState.PATROLLING)
         {
             PlayAnimation("Idle");
             yield return new WaitForSeconds(GetAnimationLength("Idle"));
@@ -117,10 +117,13 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
+        IPushable tmp2 = collision.gameObject.GetComponentInParent<IPushable>();
         if (tmp != null)
         {
-            tmp.TakeDamage(dmg,gameObject);
+            tmp.TakeDamage(collisionDmg);
+            
         }
+        if (tmp2 != null) tmp2.Push(gameObject);
     }
     //private void OnTriggerEnter2D(Collision2D collision)
     //{

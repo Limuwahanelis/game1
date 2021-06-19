@@ -268,7 +268,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1.5
-  dmg: 1
+  dmg: 0
+  collisionDmg: 1
   idleCycles: 0
   patrolPoints: []
 --- !u!114 &8681547891445100867

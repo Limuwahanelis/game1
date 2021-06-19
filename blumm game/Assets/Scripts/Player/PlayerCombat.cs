@@ -7,6 +7,7 @@ public class PlayerCombat : MonoBehaviour
     private Player _player;
     public Transform attackPos;
     public float attackRange;
+    public float InvincibilityTime;
     public LayerMask enemyLayer;
     public int dmg;
     // Start is called before the first frame update
@@ -31,7 +32,7 @@ public class PlayerCombat : MonoBehaviour
             for(int i=0;i<hitEnemies.Length;i++)
             {
                 IDamagable enemy = hitEnemies[i].GetComponentInParent<IDamagable>();
-                if (enemy!=null) enemy.TakeDamage(dmg,gameObject);
+                if (enemy!=null) enemy.TakeDamage(dmg );
             }
             _player.isAttacking = true;
         }
@@ -39,7 +40,17 @@ public class PlayerCombat : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
-        
+    }
+    public void StartInvincibiltyTime()
+    {
+        StartCoroutine(InvincibilityCor());
+    }
+    private IEnumerator InvincibilityCor()
+    {
+        if (_player.playerHealth.isInvincible) yield break;
+        else _player.playerHealth.isInvincible = true;
+        yield return new WaitForSeconds(InvincibilityTime);
+        _player.playerHealth.isInvincible = false;
     }
     
 }

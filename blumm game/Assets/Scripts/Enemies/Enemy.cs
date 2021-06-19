@@ -9,7 +9,9 @@ public abstract class Enemy : MonoBehaviour
     protected HealthSystem hpSys;
     public float speed;
     public int dmg;
+    public int collisionDmg;
 
-    public virtual void SetPlayerInRange() {}
-    public virtual void SetPlayerNotInRange() { }
+    protected virtual void SetPlayerInRange() {}
+    protected virtual void SetPlayerNotInRange() { }
+    protected virtual void SetUpComponents() { }
 }

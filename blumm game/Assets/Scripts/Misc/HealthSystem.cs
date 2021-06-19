@@ -4,19 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthSystem : MonoBehaviour, IDamagable
+public class HealthSystem : MonoBehaviour, IDamagable,IPushable
 {
     public bool isInvincible;
     public IntReference maxHP;
     public IntReference currentHP;
-    public Action<GameObject> OnHitEvent;
+    public Action OnHitEvent;
     public Action OnDeathEvent;
+    public Action<GameObject> OnPushEvent;
     // Start is called before the first frame update
     void Start()
     {
         currentHP.value = maxHP.value;
     }
-    public virtual void TakeDamage(int dmg,GameObject dmgDealer)
+    public void TakeDamage(int dmg)
     {
         if (!isInvincible)
         {
@@ -26,7 +27,7 @@ public class HealthSystem : MonoBehaviour, IDamagable
                 Kill();
                 return;
             }
-            OnHitEvent?.Invoke(dmgDealer);
+            OnHitEvent?.Invoke();
         }
     }
 
@@ -34,5 +35,10 @@ public class HealthSystem : MonoBehaviour, IDamagable
     {
         if (OnDeathEvent == null) Destroy(gameObject);
         else OnDeathEvent.Invoke();
+    }
+
+    public void Push(GameObject pusher)
+    {
+        OnPushEvent?.Invoke(pusher);
     }
 }

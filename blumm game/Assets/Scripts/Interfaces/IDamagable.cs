@@ -6,6 +6,6 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    void TakeDamage(int dmg,GameObject dmgDealer);
+    void TakeDamage(int dmg);
     void Kill();
 }

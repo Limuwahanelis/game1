@@ -37,7 +37,8 @@ public class Player : MonoBehaviour,IAnimatable
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<HealthSystem>();
-        playerHealth.OnHitEvent += playerMovement.CollidedWithEnemy;
+        playerHealth.OnHitEvent +=playerCombat.StartInvincibiltyTime;
+        playerHealth.OnPushEvent+= playerMovement.CollidedWithEnemy;
         playerHealth.OnDeathEvent += () => { };
     }
 
