@@ -14,7 +14,7 @@ public class IntReferenceDrawer : PropertyDrawer
 
     /// <summary> Cached style to use to draw the popup button. </summary>
     private GUIStyle popupStyle;
-
+    
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         if (popupStyle == null)
@@ -22,10 +22,9 @@ public class IntReferenceDrawer : PropertyDrawer
             popupStyle = new GUIStyle(GUI.skin.GetStyle("PaneOptions"));
             popupStyle.imagePosition = ImagePosition.ImageOnly;
         }
-
+        EditorGUI.BeginProperty(position, label, property);
         position = EditorGUI.PrefixLabel(position, label);
-
-
+        
         // Get properties
         SerializedProperty useConstant = property.FindPropertyRelative("useConstant");
         SerializedProperty constantValue = property.FindPropertyRelative("constantValue");
@@ -37,6 +36,9 @@ public class IntReferenceDrawer : PropertyDrawer
         buttonRect.width = popupStyle.fixedWidth + popupStyle.margin.right;
         position.xMin = buttonRect.xMax;
 
+        int indent = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = 0;
+
 
         int result = EditorGUI.Popup(buttonRect, useConstant.boolValue ? 0 : 1, popupOptions, popupStyle);
 
@@ -45,5 +47,9 @@ public class IntReferenceDrawer : PropertyDrawer
         EditorGUI.PropertyField(position,
             useConstant.boolValue ? constantValue : variable,
             GUIContent.none);
+
+        EditorGUI.indentLevel = indent;
+        EditorGUI.EndProperty();
     }
+    
 }
