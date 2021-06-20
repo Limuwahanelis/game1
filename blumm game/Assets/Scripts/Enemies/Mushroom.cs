@@ -6,13 +6,8 @@ using UnityEngine;
 public class Mushroom : PatrollingEnemy, IAnimatable
 {
 
-    public event Action<string,bool> OnPlayAnimation;
-    public event Func<string, float> OnGetAnimationLength;
-    public event Action<string> OnOverPlayAnimation;
-
-    private bool _isAlive = true;
+    
     private bool _isHit = false;
-    private bool _isIdle = false;
    
 
     // Start is called before the first frame update
@@ -41,13 +36,17 @@ public class Mushroom : PatrollingEnemy, IAnimatable
                     PlayAnimation("Move");
                     MoveToPatrolPoint();
                 }
-                if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT || currentState == EnemyEnums.State.ALWAYS_IDLE)
+                if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT)
                 {
-                   StartCoroutine(IdleTimerCor(idleCycles));
+                   if(!_isIdle) StayIdleAtPatrolPoint();
+                }
+                if(currentState==EnemyEnums.State.ALWAYS_IDLE)
+                {
+                    if(!_isIdle) StartCoroutine(StayIdleCor());
                 }
                 if(currentState == EnemyEnums.State.IDLE_AFTER_HIT)
                 {
-                    StayIdleAfterHit();
+                    if (!_isIdle) StayIdleAfterHit();
                 }
             }
         }
@@ -56,25 +55,9 @@ public class Mushroom : PatrollingEnemy, IAnimatable
             Destroy(gameObject);
         }
     }
-
-    IEnumerator IdleTimerCor(int numbeOfIdleCycles)
-    {
-        if (_isIdle) yield break;
-        else _isIdle = true;
-        if(numbeOfIdleCycles>0) PlayAnimation("Idle");
-        yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
-        _isIdle = false;
-        if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT)
-        {
-            currentState = EnemyEnums.State.PATROLLING;
-            RotateEnemyTowardsNextPatrolPoint();
-        }
-    }
     private void StayIdleAfterHit()
     {
-        if (_isIdle) return;
-        _isIdle = true;
-        PlayAnimation("Idle");
+        StartCoroutine(StayIdleCor());
         StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle"), ResumeActions));
     }
     private void KillEnemy()
@@ -88,7 +71,6 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     private void HitEnemy()
     {
         StopCurrentActions();
-        Debug.Log("hit");
         states.Push(currentState);
         _isHit = true;
         PlayAnimation("Hit");
@@ -112,36 +94,6 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         _isIdle = false;
     }
 
-
-    //IEnumerator EnemyHitCor()
-    //{
-    //    PlayAnimation("Hit");
-    //    yield return new WaitForSeconds(GetAnimationLength("Hit"));
-    //    hpSys.isInvincible = false;
-    //    if (currentState== EnemyEnums.State.PATROLLING)
-    //    {
-    //        PlayAnimation("Idle");
-    //        yield return new WaitForSeconds(GetAnimationLength("Idle"));
-    //    }
-    //    _isHit = false;
-    //}
-
-    public void PlayAnimation(string name, bool canBePlayedOver = true)
-    {
-        OnPlayAnimation?.Invoke(name, canBePlayedOver);
-    }
-
-    public float GetAnimationLength(string name)
-    {
-        return (float)OnGetAnimationLength?.Invoke(name);
-    }
-
-
-    IEnumerator WaitSomeTimeAndDoSmth(float timeToWait, Action functionToPerform)
-    {
-        yield return new WaitForSeconds(timeToWait);
-        functionToPerform();
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

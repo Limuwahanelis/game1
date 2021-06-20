@@ -50,4 +50,17 @@ public class PatrollingEnemy : Enemy
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
+
+    protected void StayIdleAtPatrolPoint()
+    {
+        StartCoroutine(StayIdleCor(idleCycles));
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle") * idleCycles, ResumePatrol));
+    }
+
+    protected void ResumePatrol()
+    {
+        currentState = EnemyEnums.State.PATROLLING;
+        RotateEnemyTowardsNextPatrolPoint();
+    }
+
 }
