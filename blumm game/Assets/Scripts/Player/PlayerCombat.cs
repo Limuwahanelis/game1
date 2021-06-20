@@ -6,7 +6,8 @@ public class PlayerCombat : MonoBehaviour
 {
     private Player _player;
     public Transform attackPos;
-    public float attackRange;
+    public float attackRangeX;
+    public float attackRangeY;
     public float InvincibilityTime;
     public LayerMask enemyLayer;
     public int dmg;
@@ -27,7 +28,7 @@ public class PlayerCombat : MonoBehaviour
         if (!_player.isAttacking && _player.isOnGround)
         {
             _player.playerMovement.StopPlayer();
-            Collider2D[] hitEnemies =Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyLayer);
+            Collider2D[] hitEnemies =Physics2D.OverlapBoxAll(attackPos.position,new Vector2(attackRangeX,attackRangeY), enemyLayer);
             for(int i=0;i<hitEnemies.Length;i++)
             {
                 IDamagable enemy = hitEnemies[i].GetComponentInParent<IDamagable>();
@@ -59,6 +60,6 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+        Gizmos.DrawWireCube(attackPos.position, new Vector3(attackRangeX, attackRangeY));
     }
 }
