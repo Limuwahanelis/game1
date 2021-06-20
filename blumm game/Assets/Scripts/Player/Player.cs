@@ -60,17 +60,20 @@ public class Player : MonoBehaviour, IAnimatable
         {
             if (isOnGround)
             {
-               // if (!isHit)
-               // {
-                    if (isMoving) PlayAnimation("Walk");
-                    else PlayAnimation("Idle");
-                    if (isAttacking)
-                    {
-                        TakeControlFromPlayer(Cause.ATTACK);
-                        PlayAnimation("Attack");
-                        StartCoroutine(AttackCor(GetAnimationLength("Attack"), (result => isAttacking = result), isAttacking));
-                    }
-                //}
+
+                if (isMoving) PlayAnimation("Walk");
+                else PlayAnimation("Idle");
+                if (isAttacking)
+                {
+                    TakeControlFromPlayer(Cause.ATTACK);
+                    PlayAnimation("Attack");
+                    StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Attack"), () =>
+                     {
+                         isAttacking = !isAttacking;
+                         ReturnControlToPlayer(Cause.ATTACK);
+                     }));
+                }
+
             }
         }
         if (!isOnGround)
@@ -81,7 +84,6 @@ public class Player : MonoBehaviour, IAnimatable
             }
                 
         }
-        //if (isOnGround) ReturnControlToPlayer(Cause.ENEMY);
     }
 
     public void ReturnControlToPlayer(Cause returnControlCause)
@@ -107,18 +109,11 @@ public class Player : MonoBehaviour, IAnimatable
         NoControlCause = takeAwayCause;
         playerMovement.StopPlayer();
     }
-    public IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue, Cause noControlReason)
-    {
-        yield return new WaitForSeconds(animationLength);
-        myVariableLambda(!currentValue);
-        ReturnControlToPlayer(noControlReason);
-    }
 
-    IEnumerator AttackCor(float animationLength, Action<bool> myVariableLambda, bool currentValue)
+    public IEnumerator WaitAndExecuteFunction(float timeToWait, Action functionToExecute)
     {
-        yield return new WaitForSeconds(animationLength);
-        myVariableLambda(!currentValue);
-        ReturnControlToPlayer(Cause.ATTACK);
+        yield return new WaitForSeconds(timeToWait);
+        functionToExecute();
     }
 
     public IEnumerator WaitForPlayerToLandOnGroundAfterPush()

@@ -26,7 +26,6 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!_player.isAttacking && _player.isOnGround)
         {
-            //_player.TakeControlFromPlayer(Player.Cause.ATTACK);
             _player.playerMovement.StopPlayer();
             Collider2D[] hitEnemies =Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemyLayer);
             for(int i=0;i<hitEnemies.Length;i++)
@@ -37,14 +36,11 @@ public class PlayerCombat : MonoBehaviour
             _player.isAttacking = true;
         }
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attackPos.position, attackRange);
-    }
+
     public void PlayerHit()
     {
         _player.TakeControlFromPlayer(Player.Cause.ENEMY);
-        StartCoroutine(_player.WaitForAnimationToEnd(_player.GetAnimationLength("Hit"), (bool a) => { }, false, Player.Cause.ENEMY));
+        StartCoroutine(_player.WaitAndExecuteFunction(_player.GetAnimationLength("Hit"),()=> { _player.ReturnControlToPlayer(Player.Cause.ENEMY); }));
         _player.OverPlayAnimation("Hit");
         StartCoroutine(InvincibilityCor());
     }
@@ -55,5 +51,8 @@ public class PlayerCombat : MonoBehaviour
         yield return new WaitForSeconds(InvincibilityTime);
         _player.playerHealth.isInvincible = false;
     }
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
 }

@@ -78,7 +78,11 @@ public class PlayerMovement : MonoBehaviour
             _player.isJumping = true;   
             _player.TakeControlFromPlayer(Player.Cause.JUMP);
             _player.PlayAnimation("Jump",false);
-            _player.StartCoroutine(_player.WaitForAnimationToEnd(_player.GetAnimationLength("Jump"), (result => _player.isJumping = result), _player.isJumping, Player.Cause.JUMP));
+            _player.StartCoroutine(_player.WaitAndExecuteFunction(_player.GetAnimationLength("Jump"), () => 
+            {
+                _player.isJumping = !_player.isJumping;
+                _player.ReturnControlToPlayer(Player.Cause.JUMP);
+            }));
         }
     }
 
