@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Goblin : PatrollingEnemy, IAnimatable
 {
-    Stack<EnemyEnums.State> states = new Stack<EnemyEnums.State>();
+    
 
     [SerializeField]
     private float _attackRangeX;
@@ -138,6 +138,8 @@ public class Goblin : PatrollingEnemy, IAnimatable
 
     private void HitEnemy()
     {
+        StopCurrentActions();
+        Debug.Log("hit");
         states.Push(currentState);
         _isHit = true;
         PlayAnimation("Hit");
@@ -149,11 +151,12 @@ public class Goblin : PatrollingEnemy, IAnimatable
         }));
     }
 
+
     public void StartCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = true;
         StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
-        currentCor = StartCoroutine(CheckForPlayerColliderCor());
+        StartCoroutine(CheckForPlayerColliderCor());
     }
     public void StopCheckingForPlayerCol()
     {
@@ -177,17 +180,17 @@ public class Goblin : PatrollingEnemy, IAnimatable
 
 
 
-    private void StopCurrentActions()
+    protected override void StopCurrentActions()
     {
-        StopAllCoroutines();
-
+        base.StopCurrentActions();
         _isIdle = false;
         _isCheckingForPlayerCol = false;
         _isAttacking = false;
     }
-    private void ResumeActions()
+
+    protected override void ResumeActions()
     {
-        currentState = states.Pop();
+        base.ResumeActions();
         _isAttacking = false;
         _isIdle = false;
     }

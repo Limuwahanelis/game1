@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PatrollingEnemy : Enemy
 {
-    protected EnemyEnums.State currentState;
+    
 
     public int idleCycles;
     public List<Transform> patrolPoints = new List<Transform>();

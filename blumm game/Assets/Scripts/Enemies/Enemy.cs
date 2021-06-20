@@ -11,10 +11,21 @@ public abstract class Enemy : MonoBehaviour
     public int dmg;
     public int collisionDmg;
 
+    protected EnemyEnums.State currentState;
+    protected Stack<EnemyEnums.State> states = new Stack<EnemyEnums.State>();
     protected virtual void SetPlayerInRange() {}
     protected virtual void SetPlayerNotInRange() { }
     protected virtual void SetUpComponents()
     {
         hpSys = GetComponent<HealthSystem>();
+    }
+
+    protected virtual void StopCurrentActions()
+    {
+        StopAllCoroutines();
+    }
+    protected virtual void ResumeActions()
+    {
+        currentState = states.Pop();
     }
 }

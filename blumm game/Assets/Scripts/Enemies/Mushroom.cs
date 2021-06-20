@@ -15,7 +15,6 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     private bool _isIdle = false;
    
 
-
     private Coroutine currentCor = null;
 
     // Start is called before the first frame update
