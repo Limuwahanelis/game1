@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour,IAnimatable
+public class Player : MonoBehaviour, IAnimatable
 {
     public enum Cause
     {
@@ -21,15 +21,23 @@ public class Player : MonoBehaviour,IAnimatable
     public PlayerCombat playerCombat;
     public HealthSystem playerHealth;
 
-
+    [HideInInspector]
     public bool isMoving;
+    [HideInInspector]
     public bool isJumping;
+    [HideInInspector]
     public bool isMovableByPlayer = true;
+    [HideInInspector]
     public bool isOnGround;
+    [HideInInspector]
     public bool isFalling;
+    [HideInInspector]
     public bool isAttacking;
+    [HideInInspector]
     public bool isPushedBack;
+    [HideInInspector]
     public bool isHit;
+
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;

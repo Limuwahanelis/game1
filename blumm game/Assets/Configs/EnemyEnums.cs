@@ -1,5 +1,5 @@
 
-public static class EnemyStates
+public static class EnemyEnums
 {
     public enum State
     {
@@ -7,5 +7,6 @@ public static class EnemyStates
         PATROLLING,
         IDLE_AT_PATROL_POINT,
         ATTACKING,
+        IDLE_AFTER_HIT
     }
 }

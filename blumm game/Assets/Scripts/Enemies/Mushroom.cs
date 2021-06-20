@@ -32,12 +32,12 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         {
             if (!_isHit)
             {
-                if (currentState == EnemyStates.State.PATROLLING)
+                if (currentState == EnemyEnums.State.PATROLLING)
                 {
                     PlayAnimation("Move");
                     MoveToPatrolPoint();
                 }
-                if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT || currentState == EnemyStates.State.ALWAYS_IDLE)
+                if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT || currentState == EnemyEnums.State.ALWAYS_IDLE)
                 {
                    currentCor= StartCoroutine(IdleTimerCor(idleCycles));
                 }
@@ -82,9 +82,9 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
-        if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT)
+        if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT)
         {
-            currentState = EnemyStates.State.PATROLLING;
+            currentState = EnemyEnums.State.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
@@ -99,7 +99,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         PlayAnimation("Hit");
         yield return new WaitForSeconds(GetAnimationLength("Hit"));
         hpSys.isInvincible = false;
-        if (currentState== EnemyStates.State.PATROLLING)
+        if (currentState== EnemyEnums.State.PATROLLING)
         {
             PlayAnimation("Idle");
             yield return new WaitForSeconds(GetAnimationLength("Idle"));

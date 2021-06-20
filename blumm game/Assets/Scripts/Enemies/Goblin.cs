@@ -6,6 +6,9 @@ using UnityEngine;
 public class Goblin : PatrollingEnemy, IAnimatable
 {
     [SerializeField]
+    Stack<EnemyEnums.State> states = new Stack<EnemyEnums.State>();
+
+    [SerializeField]
     private float _attackRangeX;
     [SerializeField]
     private float _attackRangeY;
@@ -18,7 +21,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
 
-    private EnemyStates.State _previousState;
+    private EnemyEnums.State _previousState;
 
     private bool _isAlive = true;
     private bool _isHit = false;
@@ -37,7 +40,6 @@ public class Goblin : PatrollingEnemy, IAnimatable
     // Start is called before the first frame update
     void Start()
     {
-        
         SetUpBehaviour();
         SetUpComponents();
     }
@@ -47,11 +49,13 @@ public class Goblin : PatrollingEnemy, IAnimatable
         _detection = GetComponentInChildren<PlayerDetection>();
         _detection.OnPlayerDetected = SetPlayerInRange;
         _detection.OnPlayerLeft = SetPlayerNotInRange;
+        hpSys.OnHit += HitEnemy;
     }
     protected override void SetUpBehaviour()
     {
         base.SetUpBehaviour();
         _previousState = currentState;
+        //states.Push(_previousState);
     }
 
     // Update is called once per frame
@@ -61,18 +65,23 @@ public class Goblin : PatrollingEnemy, IAnimatable
         {
             if (!_isHit)
             {
-                if (currentState == EnemyStates.State.PATROLLING)
+                if (currentState == EnemyEnums.State.PATROLLING)
                 {
                     PlayAnimation("Move");
                     MoveToPatrolPoint();
                 }
-                if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT || currentState == EnemyStates.State.ALWAYS_IDLE)
+                if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT || currentState == EnemyEnums.State.ALWAYS_IDLE)
                 {
                     currentCor = StartCoroutine(IdleTimerCor(idleCycles));
                 }
-                if(currentState== EnemyStates.State.ATTACKING)
+                if(currentState== EnemyEnums.State.ATTACKING)
                 {
                     Attack();
+                }
+                if(currentState==EnemyEnums.State.IDLE_AFTER_HIT)
+                {
+                    StayIdleAfterHit();
+
                 }
             }
         }
@@ -82,6 +91,13 @@ public class Goblin : PatrollingEnemy, IAnimatable
         }
     }
 
+    private void StayIdleAfterHit()
+    {
+        if (_isIdle) return;
+        _isIdle = true;
+        PlayAnimation("Idle");
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle"), ResumeActions));
+    }
     IEnumerator IdleTimerCor(int numbeOfIdleCycles)
     {
         if (_isIdle) yield break;
@@ -89,9 +105,9 @@ public class Goblin : PatrollingEnemy, IAnimatable
         PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
-        if (currentState == EnemyStates.State.IDLE_AT_PATROL_POINT)
+        if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT)
         {
-            currentState = EnemyStates.State.PATROLLING;
+            currentState = EnemyEnums.State.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
@@ -104,7 +120,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
         PlayAnimation("Attack");
         StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), () => 
         { 
-            PlayAnimation("Idle"); StartCoroutine(WaitSomeTimeAndDoSmth(_attackCooldown, () => { _isAttacking = false; })); 
+            PlayAnimation("Idle"); StartCoroutine(WaitSomeTimeAndDoSmth(_attackCooldown, () => { _isAttacking = false;  })); 
         }));
     }
     
@@ -136,7 +152,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
     {
         _isCheckingForPlayerCol = true;
         StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
-        StartCoroutine(CheckForPlayerColliderCor());
+        currentCor = StartCoroutine(CheckForPlayerColliderCor());
     }
     public void StopCheckingForPlayerCol()
     {
@@ -145,6 +161,8 @@ public class Goblin : PatrollingEnemy, IAnimatable
 
     protected override void SetPlayerInRange()
     {
+        states.Push(currentState);
+        currentState = EnemyEnums.State.ATTACKING;
         StopCurrentActions();
         Attack();
     }
@@ -154,22 +172,36 @@ public class Goblin : PatrollingEnemy, IAnimatable
     }
     private void StopCurrentActions()
     {
-        if (currentCor != null) StopCoroutine(currentCor);
-        _previousState = currentState;
+        StopAllCoroutines();
+
         _isIdle = false;
-        currentState = EnemyStates.State.ATTACKING;
+        _isCheckingForPlayerCol = false;
+        _isAttacking = false;
     }
 
     private void ResumeActions()
     {
-        currentState = _previousState;
+        currentState = states.Pop();
         _isAttacking = false;
+        _isIdle = false;
     }
     public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
         OnPlayAnimation?.Invoke(name,canBePlayedOver);
     }
 
+    private void HitEnemy()
+    {
+        states.Push(currentState);
+        _isHit = true;
+        PlayAnimation("Hit");
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Hit"), () =>
+        {
+            states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
+            _isHit = false;
+            ResumeActions();
+        }));
+    }
     public float GetAnimationLength(string name)
     {
         return (float)OnGetAnimationLength?.Invoke(name);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PatrollingEnemy : Enemy
 {
-    protected EnemyStates.State currentState;
+    protected EnemyEnums.State currentState;
 
     public int idleCycles;
     public List<Transform> patrolPoints = new List<Transform>();
@@ -19,7 +19,7 @@ public class PatrollingEnemy : Enemy
         {
             if (_patrolPointIndex + 1 > _patrolpositions.Count - 1) _patrolPointIndex = 0;
             else _patrolPointIndex++;
-            currentState = EnemyStates.State.IDLE_AT_PATROL_POINT;
+            currentState = EnemyEnums.State.IDLE_AT_PATROL_POINT;
         }
     }
 
@@ -42,11 +42,11 @@ public class PatrollingEnemy : Enemy
         }
         if (patrolPoints.Count < 2)
         {
-            currentState = EnemyStates.State.ALWAYS_IDLE;
+            currentState = EnemyEnums.State.ALWAYS_IDLE;
         }
         else
         {
-            currentState = EnemyStates.State.PATROLLING;
+            currentState = EnemyEnums.State.PATROLLING;
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
