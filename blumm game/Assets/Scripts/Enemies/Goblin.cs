@@ -47,10 +47,6 @@ public class Goblin : PatrollingEnemy, IAnimatable
         _detection.OnPlayerLeft = SetPlayerNotInRange;
         hpSys.OnHit += HitEnemy;
     }
-    protected override void SetUpBehaviour()
-    {
-        base.SetUpBehaviour();
-    }
 
     // Update is called once per frame
     void Update()
@@ -90,7 +86,7 @@ public class Goblin : PatrollingEnemy, IAnimatable
     {
         if (_isIdle) yield break;
         else _isIdle = true;
-        PlayAnimation("Idle");
+        if(numbeOfIdleCycles>0)PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
         if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT)

@@ -15,13 +15,18 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     private bool _isIdle = false;
    
 
-    private Coroutine currentCor = null;
-
     // Start is called before the first frame update
     void Start()
     {
         SetUpComponents();
         SetUpBehaviour();
+    }
+
+    protected override void SetUpComponents()
+    {
+        hpSys = GetComponent<HealthSystem>();
+        hpSys.OnDeath += KillEnemy;
+        hpSys.OnHit += HitEnemy;
     }
 
     // Update is called once per frame
@@ -38,7 +43,11 @@ public class Mushroom : PatrollingEnemy, IAnimatable
                 }
                 if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT || currentState == EnemyEnums.State.ALWAYS_IDLE)
                 {
-                   currentCor= StartCoroutine(IdleTimerCor(idleCycles));
+                   StartCoroutine(IdleTimerCor(idleCycles));
+                }
+                if(currentState == EnemyEnums.State.IDLE_AFTER_HIT)
+                {
+                    StayIdleAfterHit();
                 }
             }
         }
@@ -47,38 +56,12 @@ public class Mushroom : PatrollingEnemy, IAnimatable
             Destroy(gameObject);
         }
     }
-    private void KillEnemy()
-    {
-        _isHit = true;
-        StopCurrentActions();
-        PlayAnimation("Death");
-        StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("Death"), (result) => _isAlive = result, _isAlive));
-    }
 
-    private void HitEnemy()
-    {
-        _isHit = true;
-        _isIdle = false;
-        StopCurrentActions();
-        hpSys.isInvincible = true;
-        StartCoroutine(EnemyHitCor());
-    }
-    private void StopCurrentActions()
-    {
-       if(currentCor!=null) StopCoroutine(currentCor);
-    }
-
-    protected override void SetUpComponents()
-    {
-        hpSys = GetComponent<HealthSystem>();
-        hpSys.OnDeath += KillEnemy;
-        hpSys.OnHit += HitEnemy;
-    }
     IEnumerator IdleTimerCor(int numbeOfIdleCycles)
     {
-        if(_isIdle) yield break ;
+        if (_isIdle) yield break;
         else _isIdle = true;
-        PlayAnimation("Idle");
+        if(numbeOfIdleCycles>0) PlayAnimation("Idle");
         yield return new WaitForSeconds(numbeOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
         if (currentState == EnemyEnums.State.IDLE_AT_PATROL_POINT)
@@ -87,24 +70,61 @@ public class Mushroom : PatrollingEnemy, IAnimatable
             RotateEnemyTowardsNextPatrolPoint();
         }
     }
-    IEnumerator WaitForAnimationToEnd(float animationLength, Action<bool> myVariableLambda, bool currentValue)
+    private void StayIdleAfterHit()
     {
-        yield return new WaitForSeconds(animationLength);
-        myVariableLambda(!currentValue);
+        if (_isIdle) return;
+        _isIdle = true;
+        PlayAnimation("Idle");
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle"), ResumeActions));
+    }
+    private void KillEnemy()
+    {
+        _isHit = true;
+        StopCurrentActions();
+        PlayAnimation("Death");
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Death"), () => _isAlive = false));
     }
 
-    IEnumerator EnemyHitCor()
+    private void HitEnemy()
     {
+        StopCurrentActions();
+        Debug.Log("hit");
+        states.Push(currentState);
+        _isHit = true;
         PlayAnimation("Hit");
-        yield return new WaitForSeconds(GetAnimationLength("Hit"));
-        hpSys.isInvincible = false;
-        if (currentState== EnemyEnums.State.PATROLLING)
+        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Hit"), () =>
         {
-            PlayAnimation("Idle");
-            yield return new WaitForSeconds(GetAnimationLength("Idle"));
-        }
-        _isHit = false;
+            states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
+            _isHit = false;
+            ResumeActions();
+        }));
     }
+
+    protected override void StopCurrentActions()
+    {
+        base.StopCurrentActions();
+        _isIdle = false;
+    }
+
+    protected override void ResumeActions()
+    {
+        base.ResumeActions();
+        _isIdle = false;
+    }
+
+
+    //IEnumerator EnemyHitCor()
+    //{
+    //    PlayAnimation("Hit");
+    //    yield return new WaitForSeconds(GetAnimationLength("Hit"));
+    //    hpSys.isInvincible = false;
+    //    if (currentState== EnemyEnums.State.PATROLLING)
+    //    {
+    //        PlayAnimation("Idle");
+    //        yield return new WaitForSeconds(GetAnimationLength("Idle"));
+    //    }
+    //    _isHit = false;
+    //}
 
     public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
@@ -115,6 +135,14 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     {
         return (float)OnGetAnimationLength?.Invoke(name);
     }
+
+
+    IEnumerator WaitSomeTimeAndDoSmth(float timeToWait, Action functionToPerform)
+    {
+        yield return new WaitForSeconds(timeToWait);
+        functionToPerform();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
