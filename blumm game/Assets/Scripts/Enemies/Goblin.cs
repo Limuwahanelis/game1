@@ -36,11 +36,12 @@ public class Goblin : PatrollingEnemy
     }
     protected override void SetUpComponents()
     {
-        hpSys = GetComponent<HealthSystem>();
+        base.SetUpComponents();
         _detection = GetComponentInChildren<PlayerDetection>();
         _detection.OnPlayerDetected = SetPlayerInRange;
         _detection.OnPlayerLeft = SetPlayerNotInRange;
         hpSys.OnHit += HitEnemy;
+        hpSys.OnDeath = Kill;
     }
 
     // Update is called once per frame
@@ -74,10 +75,6 @@ public class Goblin : PatrollingEnemy
                 }
             }
         }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
 
 
@@ -85,7 +82,7 @@ public class Goblin : PatrollingEnemy
     private void StayIdleAfterHit()
     {
         StartCoroutine(StayIdleCor());
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle"), ResumeActions));
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Idle"), ResumeActions));
     }
 
     private void Attack()
@@ -93,9 +90,9 @@ public class Goblin : PatrollingEnemy
         if (_isAttacking) return;
         _isAttacking = true;
         PlayAnimation("Attack");
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), () => 
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Attack"), () => 
         { 
-            PlayAnimation("Idle"); StartCoroutine(WaitSomeTimeAndDoSmth(_attackCooldown, () => { _isAttacking = false;  })); 
+            PlayAnimation("Idle"); StartCoroutine(WaitAndExecuteFunction(_attackCooldown, () => { _isAttacking = false;  })); 
         }));
     }
     
@@ -124,7 +121,7 @@ public class Goblin : PatrollingEnemy
         states.Push(currentState);
         _isHit = true;
         PlayAnimation("Hit");
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Hit"), () =>
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Hit"), () =>
         {
             states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
             _isHit = false;
@@ -132,11 +129,19 @@ public class Goblin : PatrollingEnemy
         }));
     }
 
+    private void Kill()
+    {
+        StopCurrentActions();
+        _isAlive = false;
+        currentState = EnemyEnums.State.DEAD;
+        PlayAnimation("Death");
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Death"),()=> Destroy(gameObject)));
 
+    }
     public void StartCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = true;
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Attack"), StopCheckingForPlayerCol));
         StartCoroutine(CheckForPlayerColliderCor());
     }
     public void StopCheckingForPlayerCol()

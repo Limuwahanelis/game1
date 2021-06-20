@@ -58,14 +58,14 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     private void StayIdleAfterHit()
     {
         StartCoroutine(StayIdleCor());
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle"), ResumeActions));
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Idle"), ResumeActions));
     }
     private void KillEnemy()
     {
         _isHit = true;
         StopCurrentActions();
         PlayAnimation("Death");
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Death"), () => _isAlive = false));
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Death"), () => _isAlive = false));
     }
 
     private void HitEnemy()
@@ -74,7 +74,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
         states.Push(currentState);
         _isHit = true;
         PlayAnimation("Hit");
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Hit"), () =>
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Hit"), () =>
         {
             states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
             _isHit = false;

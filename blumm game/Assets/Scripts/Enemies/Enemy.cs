@@ -46,7 +46,7 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
         yield return new WaitForSeconds(numberOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
     }
-    protected IEnumerator WaitSomeTimeAndDoSmth(float timeToWait, Action functionToPerform)
+    protected IEnumerator WaitAndExecuteFunction(float timeToWait, Action functionToPerform)
     {
         yield return new WaitForSeconds(timeToWait);
         functionToPerform();

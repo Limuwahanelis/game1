@@ -13,6 +13,7 @@ public class Player : MonoBehaviour, IAnimatable
         OVERRIDE,
         ATTACK,
         JUMP,
+        DEATH
     }
     public Cause NoControlCause = Cause.NONE;
 
@@ -50,7 +51,7 @@ public class Player : MonoBehaviour, IAnimatable
         playerHealth = GetComponent<HealthSystem>();
         playerHealth.OnHit +=playerCombat.PlayerHit;
         playerHealth.OnPush+= playerMovement.CollidedWithEnemy;
-        playerHealth.OnDeath += () => { };
+        playerHealth.OnDeath = playerCombat.KillPlayer;
     }
 
     // Update is called once per frame
@@ -110,6 +111,25 @@ public class Player : MonoBehaviour, IAnimatable
         playerMovement.StopPlayer();
     }
 
+    public void StopAllActions()
+    {
+        TakeControlFromPlayer(Cause.DEATH);
+        StopAllCoroutines();
+        playerMovement.StopAllCoroutines();
+        playerCombat.StopAllCoroutines();
+        playerHealth.StopAllCoroutines();
+
+
+        isMoving = false;
+        isJumping = false;
+        isMovableByPlayer = false;
+        isFalling = false;
+        isAttacking = false;
+        isPushedBack = false;
+        isHit = false;
+
+        
+    }
     public IEnumerator WaitAndExecuteFunction(float timeToWait, Action functionToExecute)
     {
         yield return new WaitForSeconds(timeToWait);

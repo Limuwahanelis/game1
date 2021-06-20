@@ -54,7 +54,7 @@ public class PatrollingEnemy : Enemy
     protected void StayIdleAtPatrolPoint()
     {
         StartCoroutine(StayIdleCor(idleCycles));
-        StartCoroutine(WaitSomeTimeAndDoSmth(GetAnimationLength("Idle") * idleCycles, ResumePatrol));
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Idle") * idleCycles, ResumePatrol));
     }
 
     protected void ResumePatrol()

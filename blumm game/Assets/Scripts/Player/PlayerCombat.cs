@@ -44,6 +44,12 @@ public class PlayerCombat : MonoBehaviour
         _player.OverPlayAnimation("Hit");
         StartCoroutine(InvincibilityCor());
     }
+
+    public void KillPlayer()
+    {
+        _player.StopAllActions();
+        _player.PlayAnimation("Death");
+    }
     private IEnumerator InvincibilityCor()
     {
         if (_player.playerHealth.isInvincible) yield break;
