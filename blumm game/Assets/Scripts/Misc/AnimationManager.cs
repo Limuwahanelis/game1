@@ -14,9 +14,7 @@ public class AnimationManager : MonoBehaviour
     public List<string> stateNames = new List<string>();
     private float _animLength;
     private bool _overPlayAnimationEnded=true;
-    private bool _timerStarted;
     private Coroutine _currentTimer;
-    private bool _animationEnded;
     private void Start()
     {
         _objectToAnimate = GetComponent<IAnimatable>();
@@ -91,7 +89,6 @@ public class AnimationManager : MonoBehaviour
         //if (_currentAnimation == clipToPlay.name) return;
         if(_currentTimer!=null) StopCoroutine(_currentTimer);
         _overPlayAnimationEnded = true;
-        _timerStarted = false;
 
         _anim.Play(clipToPlay.nameHash);
         _currentAnimation = clipToPlay.name;
@@ -117,8 +114,6 @@ public class AnimationManager : MonoBehaviour
 
     IEnumerator TimerCor(float time,Action functionToPerform)
     {
-        //if (_timerStarted) yield break;
-        //else _timerStarted = true;
         yield return new WaitForSeconds(time);
         functionToPerform();
     }
@@ -126,7 +121,6 @@ public class AnimationManager : MonoBehaviour
     private void SetOverPlayAnimAsEnded()
     {
         _overPlayAnimationEnded = true;
-        _timerStarted = false;
     }
     private void SetNormalAnimAsEneded()
     {
