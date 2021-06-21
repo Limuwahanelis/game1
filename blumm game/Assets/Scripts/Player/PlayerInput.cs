@@ -6,6 +6,7 @@ public class PlayerInput : MonoBehaviour
 {
 
     public Player player;
+    public BoolReference isGamePaused;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,16 +17,19 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         float direction = Input.GetAxisRaw("Horizontal");
-        if (player.isAlive)
+        if (!isGamePaused.value)
         {
-            player.playerMovement.MovePlayer(direction);
-            if (Input.GetButtonDown("Jump"))
+            if (player.isAlive)
             {
-                player.playerMovement.Jump();
-            }
-            if (Input.GetButtonDown("Attack"))
-            {
-                player.playerCombat.Attack();
+                player.playerMovement.MovePlayer(direction);
+                if (Input.GetButtonDown("Jump"))
+                {
+                    player.playerMovement.Jump();
+                }
+                if (Input.GetButtonDown("Attack"))
+                {
+                    player.playerCombat.Attack();
+                }
             }
         }
     }

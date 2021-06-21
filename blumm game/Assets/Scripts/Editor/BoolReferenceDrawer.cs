@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(IntReference))]
-public class IntReferenceDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(BoolReference))]
+public class BoolReferenceDrawer : PropertyDrawer
 {
     /// <summary>
     /// Options to display in the popup to select constant or variable.
@@ -14,7 +14,7 @@ public class IntReferenceDrawer : PropertyDrawer
 
     /// <summary> Cached style to use to draw the popup button. </summary>
     private GUIStyle popupStyle;
-    
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         if (popupStyle == null)
@@ -50,11 +50,10 @@ public class IntReferenceDrawer : PropertyDrawer
             useConstant.boolValue ? constantValue : variable,
             GUIContent.none);
 
-        if (EditorGUI.EndChangeCheck())
-            property.serializedObject.ApplyModifiedProperties();
+         if (EditorGUI.EndChangeCheck())
+             property.serializedObject.ApplyModifiedProperties();
 
         EditorGUI.indentLevel = indent;
         EditorGUI.EndProperty();
     }
-    
 }

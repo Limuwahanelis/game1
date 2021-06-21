@@ -5,22 +5,22 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuPanel;
-    public bool paused = false;
+    public BoolReference isGamePaused;
     // Update is called once per frame
     void Update()
     {
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!paused)
+            if (!isGamePaused.value)
             {
                 Pause();
-                paused = true;
+                isGamePaused.value = true;
             }
             else
             {
                 Resume();
-                paused = false;
+                isGamePaused.value = false;
             }
         }
     }

@@ -362,6 +362,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7860446478177638940}
+  isGamePaused:
+    useConstant: 0
+    constantValue: 0
+    variable: {fileID: 11400000, guid: 5a21cd1d0300b6340940c865c64fd878, type: 2}
 --- !u!114 &7860446478177638942
 MonoBehaviour:
   m_ObjectHideFlags: 0

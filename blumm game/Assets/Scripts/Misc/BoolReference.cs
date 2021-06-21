@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class IntReference
+public class BoolReference
 {
     public bool useConstant = true;
-    public int constantValue;
-    public IntValue variable;
+    public bool constantValue;
+    public BoolValue variable;
 
-    public int value
+    public bool value
     {
         get { return useConstant ? constantValue : variable.value; }
         set
