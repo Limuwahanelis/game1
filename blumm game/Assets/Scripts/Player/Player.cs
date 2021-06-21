@@ -28,7 +28,6 @@ public class Player : MonoBehaviour, IAnimatable
     public bool isJumping;
     [HideInInspector]
     public bool isMovableByPlayer = true;
-    [HideInInspector]
     public bool isOnGround;
     [HideInInspector]
     public bool isFalling;

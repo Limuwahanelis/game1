@@ -12,7 +12,7 @@ GameObject:
   m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -42,7 +42,7 @@ GameObject:
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -93,11 +93,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8681547891445100893, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.6136777
+      value: 4.913804
       objectReference: {fileID: 0}
     - target: {fileID: 8681547891445100893, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.06250262
+      value: -5.3503876
       objectReference: {fileID: 0}
     - target: {fileID: 8681547891445100893, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
       propertyPath: m_LocalPosition.z

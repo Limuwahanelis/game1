@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_rb.velocity.y < 0) _player.isFalling = true;
         else _player.isFalling = false;
+
     }
 
     public void MovePlayer(float direction)

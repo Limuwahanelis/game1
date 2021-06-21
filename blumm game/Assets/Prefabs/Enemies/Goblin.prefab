@@ -187,7 +187,7 @@ Transform:
   m_GameObject: {fileID: 4982873818436260462}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 6, y: 6, z: 1}
   m_Children: []
   m_Father: {fileID: 4982873818110461083}
   m_RootOrder: 0
@@ -267,7 +267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4982873818535758180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.28, y: -0.131, z: 0}
+  m_LocalPosition: {x: 0.327, y: -0.147, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4982873818110461083}
@@ -326,8 +326,8 @@ MonoBehaviour:
   collisionDmg: 1
   idleCycles: 1
   patrolPoints: []
-  _attackRangeX: 0.5
-  _attackRangeY: 0.2
+  _attackRangeX: 0.71
+  _attackRangeY: 0.21
   _attackTransform: {fileID: 4982873818535758181}
   playerCoreLayer:
     serializedVersion: 2
@@ -372,6 +372,8 @@ MonoBehaviour:
   - Move
   - Attack
   - Empty
+  - Hit
+  - Death
 --- !u!95 &4982873818751976484
 Animator:
   serializedVersion: 3
