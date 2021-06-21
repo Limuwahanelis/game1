@@ -146,6 +146,11 @@ public class Player : MonoBehaviour, IAnimatable
         {
             yield return null;
         }
+        if(playerHealth.currentHP.value<=0)
+        {
+            playerCombat.KillPlayer();
+            yield break;
+        }
         ReturnControlToPlayer(Cause.COLLISION);
         isPushedBack = false;
     }
