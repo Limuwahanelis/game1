@@ -135,6 +135,50 @@ PrefabInstance:
       propertyPath: patrolPoints.Array.data[1]
       value: 
       objectReference: {fileID: 1834519817}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: _contr
+      value: 
+      objectReference: {fileID: 9100000, guid: 80d3caaa00e2b85479cb98c6bd4e9fb7, type: 2}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateNames.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateLengths.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateNames.Array.data[3]
+      value: Hit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateNames.Array.data[4]
+      value: Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateNames.Array.data[5]
+      value: Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateLengths.Array.data[0]
+      value: 0.51666665
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateLengths.Array.data[1]
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateLengths.Array.data[2]
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateLengths.Array.data[3]
+      value: 0.26666668
+      objectReference: {fileID: 0}
+    - target: {fileID: 4982873818751976487, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
+      propertyPath: stateLengths.Array.data[4]
+      value: 0.43333334
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecbe13a548479ce449b0820c6e1f0c98, type: 3}
 --- !u!4 &8761821597366941717 stripped

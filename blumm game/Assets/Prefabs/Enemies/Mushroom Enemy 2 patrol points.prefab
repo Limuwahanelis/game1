@@ -67,6 +67,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8681547891445100866, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
+      propertyPath: _contr
+      value: 
+      objectReference: {fileID: 9100000, guid: 8653fee01600cc24bbe97fcdcfebdb0b, type: 2}
+    - target: {fileID: 8681547891445100866, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
+      propertyPath: stateLengths.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681547891445100866, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
+      propertyPath: stateLengths.Array.data[0]
+      value: 0.8666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681547891445100866, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
+      propertyPath: stateLengths.Array.data[1]
+      value: 0.68333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681547891445100866, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
+      propertyPath: stateLengths.Array.data[2]
+      value: 0.51666665
+      objectReference: {fileID: 0}
+    - target: {fileID: 8681547891445100866, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
+      propertyPath: stateLengths.Array.data[3]
+      value: 0.26666668
+      objectReference: {fileID: 0}
     - target: {fileID: 8681547891445100888, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
       propertyPath: m_Name
       value: Mushroom Enemy 2 patrol points

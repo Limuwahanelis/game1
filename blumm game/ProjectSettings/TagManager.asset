@@ -42,3 +42,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 230269291
+    locked: 0
+  - name: Walking Ground
+    uniqueID: 3280314089
+    locked: 0
+  - name: PickUps
+    uniqueID: 3458491213
+    locked: 0
+  - name: Player
+    uniqueID: 1135921019
+    locked: 0
+  - name: Enemies
+    uniqueID: 1685197603
+    locked: 0

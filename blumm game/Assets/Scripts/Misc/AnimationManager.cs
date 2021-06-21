@@ -1,98 +1,93 @@
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor.Animations;
+#endif
 using UnityEngine;
 using System;
+
 [RequireComponent(typeof(Animator))]
 public class AnimationManager : MonoBehaviour
 {
-
+#if UNITY_EDITOR
+    [HideInInspector]
+    public AnimatorController _contr;
+#endif
+    public int aa;
     private string _currentAnimation;
     private Animator _anim;
     private IAnimatable _objectToAnimate;
-    public AnimatorController _animController;
+    //public AnimatorController _animController;
+    [SerializeField]
     public List<string> stateNames = new List<string>();
+    public List<float> stateLengths = new List<float>();
     private float _animLength;
     private bool _overPlayAnimationEnded=true;
     private Coroutine _currentTimer;
     private void Start()
     {
         _objectToAnimate = GetComponent<IAnimatable>();
-       _objectToAnimate.OnPlayAnimation += PlayAnimation;
+        _objectToAnimate.OnPlayAnimation += PlayAnimation;
         _objectToAnimate.OnGetAnimationLength += GetStateLength;
-        _objectToAnimate.OnOverPlayAnimation+= OverPlayAnimation;
-        _objectToAnimate.OnGetAnimationRemainingTime+= GetCurrentStateRemainingTime;
-       _anim = GetComponent<Animator>();
-        
+        _objectToAnimate.OnOverPlayAnimation += OverPlayAnimation;
+        _objectToAnimate.OnGetAnimationRemainingTime += GetCurrentStateRemainingTime;
+        _anim = GetComponent<Animator>();
     }
-    private void OnValidate()
+
+    public void PlayAnimation(string name, bool canBePlayedOver = true)
     {
-        stateNames.Clear();
-        for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
-        {
-            stateNames.Add(_animController.layers[0].stateMachine.states[i].state.name);
-        }
-        
-    }
-    public void PlayAnimation(string name,bool canBePlayedOver=true)
-    {
-        
-        AnimatorState clipToPlay=null;
-        for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
-        {
-            if (_animController.layers[0].stateMachine.states[i].state.name == name)
-            {
-                clipToPlay = _animController.layers[0].stateMachine.states[i].state;
-            }
-        }
-        
-        if (clipToPlay == null)
+        string clipToPlayName = null;
+        int index = stateNames.FindIndex((x) => x == name);
+        clipToPlayName = stateNames[index];
+        //for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
+        //{
+        //    if (_animController.layers[0].stateMachine.states[i].state.name == name)
+        //    {
+        //        clipToPlay = _animController.layers[0].stateMachine.states[i].state;
+        //    }
+        //}
+
+        if (clipToPlayName == null)
         {
             Debug.LogError("There is no state with name: " + name);
-            return ;
+            return;
         }
-        if (_currentAnimation == clipToPlay.name) return;
+        if (_currentAnimation == clipToPlayName) return;
         if (!canBePlayedOver)
         {
 
             _overPlayAnimationEnded = false;
-            _animLength = clipToPlay.motion.averageDuration;
-            _currentTimer=StartCoroutine(TimerCor(_animLength,SetOverPlayAnimAsEnded));
-            _anim.Play(clipToPlay.nameHash);
-            _currentAnimation = clipToPlay.name;
+            _animLength = stateLengths[index];
+            _currentTimer = StartCoroutine(TimerCor(_animLength, SetOverPlayAnimAsEnded));
+            _anim.Play(Animator.StringToHash(clipToPlayName)); //clipToPlay.nameHash);
+            _currentAnimation = clipToPlayName;
         }
-        
+
         if (_overPlayAnimationEnded)
         {
-            _animLength = clipToPlay.motion.averageDuration;
-            StartCoroutine(TimerCor( _animLength, SetNormalAnimAsEneded));
-            _anim.Play(clipToPlay.nameHash);
-            _currentAnimation = clipToPlay.name;
+            _animLength = stateLengths[index];
+            StartCoroutine(TimerCor(_animLength, SetNormalAnimAsEneded));
+            _anim.Play(Animator.StringToHash(clipToPlayName)); //clipToPlay.nameHash);
+            _currentAnimation = clipToPlayName;
         }
     }
 
     public void OverPlayAnimation(string name)
     {
-        AnimatorState clipToPlay = null;
-        for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
-        {
-            if (_animController.layers[0].stateMachine.states[i].state.name == name)
-            {
-                clipToPlay = _animController.layers[0].stateMachine.states[i].state;
-            }
-        }
+        string clipToPlayName = null;
+        clipToPlayName = stateNames.Find((x) => x == name);
 
-        if (clipToPlay == null)
+        if (clipToPlayName == null)
         {
             Debug.LogError("There is no state with name: " + name);
             return;
         }
         //if (_currentAnimation == clipToPlay.name) return;
-        if(_currentTimer!=null) StopCoroutine(_currentTimer);
+        if (_currentTimer != null) StopCoroutine(_currentTimer);
         _overPlayAnimationEnded = true;
 
-        _anim.Play(clipToPlay.nameHash);
-        _currentAnimation = clipToPlay.name;
+        _anim.Play(Animator.StringToHash(clipToPlayName)); //clipToPlay.nameHash);
+        _currentAnimation = clipToPlayName;
     }
 
     private void OnDestroy()
@@ -105,13 +100,8 @@ public class AnimationManager : MonoBehaviour
     public float GetStateLength(string name)
     {
         float clipDuration = 0;
-        for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
-        {
-            if (_animController.layers[0].stateMachine.states[i].state.name == name)
-            {
-                clipDuration = _animController.layers[0].stateMachine.states[i].state.motion.averageDuration;
-            }
-        }
+        int index = stateNames.FindIndex((x) => x == name);
+        clipDuration = stateLengths[index];
         return clipDuration;
     }
 
@@ -120,7 +110,7 @@ public class AnimationManager : MonoBehaviour
         return _anim.GetCurrentAnimatorStateInfo(0).normalizedTime * _animLength;
     }
 
-    IEnumerator TimerCor(float time,Action functionToPerform)
+    IEnumerator TimerCor(float time, Action functionToPerform)
     {
         yield return new WaitForSeconds(time);
         functionToPerform();

@@ -65,7 +65,7 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
     protected IEnumerator StayIdleCor(int numberOfIdleCycles = 1)
     {
         _isIdle = true;
-        PlayAnimation("Idle");
+        if(numberOfIdleCycles>0)PlayAnimation("Idle");
         yield return new WaitForSeconds(numberOfIdleCycles * GetAnimationLength("Idle"));
         _isIdle = false;
     }
