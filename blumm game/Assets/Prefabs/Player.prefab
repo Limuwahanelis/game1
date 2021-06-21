@@ -340,6 +340,7 @@ MonoBehaviour:
   playerMovement: {fileID: 7860446478177638942}
   playerCombat: {fileID: 7860446478177638933}
   playerHealth: {fileID: 7860446478177638932}
+  isAlive: 1
   isMoving: 0
   isJumping: 0
   isMovableByPlayer: 1
@@ -450,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ceb9859af14634ab50e01e0fbaf0f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animController: {fileID: 9100000, guid: 2fdd815d2a936614f9a8a1bc44ef5713, type: 2}
+  animatorController: {fileID: 9100000, guid: 2fdd815d2a936614f9a8a1bc44ef5713, type: 2}
   stateNames:
   - Walk
   - Idle
@@ -460,6 +461,19 @@ MonoBehaviour:
   - Attack
   - Hit
   - Death
+  - dsdsad
+  - dsdsad 0
+  stateLengths:
+  - 0.43333334
+  - 1.0166667
+  - 0.26666668
+  - 0.26666668
+  - 0.26666668
+  - 0.26666668
+  - 0.18333334
+  - 0.68333334
+  - 0.26666668
+  - 0.26666668
 --- !u!95 &7860446478177638930
 Animator:
   serializedVersion: 3

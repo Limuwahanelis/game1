@@ -11,9 +11,8 @@ public class AnimationManager : MonoBehaviour
 {
 #if UNITY_EDITOR
     [HideInInspector]
-    public AnimatorController _contr;
+    public AnimatorController animatorController;
 #endif
-    public int aa;
     private string _currentAnimation;
     private Animator _anim;
     private IAnimatable _objectToAnimate;
@@ -39,13 +38,6 @@ public class AnimationManager : MonoBehaviour
         string clipToPlayName = null;
         int index = stateNames.FindIndex((x) => x == name);
         clipToPlayName = stateNames[index];
-        //for (int i = 0; i < _animController.layers[0].stateMachine.states.Length; i++)
-        //{
-        //    if (_animController.layers[0].stateMachine.states[i].state.name == name)
-        //    {
-        //        clipToPlay = _animController.layers[0].stateMachine.states[i].state;
-        //    }
-        //}
 
         if (clipToPlayName == null)
         {

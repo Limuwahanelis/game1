@@ -101,7 +101,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1685197603
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: -4387502403121105992, guid: 2160bccec226c5445a904ce68de029cc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -259,12 +259,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ceb9859af14634ab50e01e0fbaf0f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animController: {fileID: 9100000, guid: 8653fee01600cc24bbe97fcdcfebdb0b, type: 2}
+  animatorController: {fileID: 9100000, guid: 8653fee01600cc24bbe97fcdcfebdb0b, type: 2}
   stateNames:
   - Idle
   - Move
   - Death
   - Hit
+  stateLengths:
+  - 0.8666667
+  - 0.68333334
+  - 0.51666665
+  - 0.26666668
 --- !u!95 &8681547891445100895
 Animator:
   serializedVersion: 3
