@@ -44,6 +44,7 @@ public class Player : MonoBehaviour, IAnimatable
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
+    public event Func<float> OnGetAnimationRemainingTime;
 
 
     // Start is called before the first frame update

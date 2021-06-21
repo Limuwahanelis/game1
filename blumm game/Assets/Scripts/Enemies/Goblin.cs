@@ -147,9 +147,12 @@ public class Goblin : PatrollingEnemy
 
     protected override void ResumeActions()
     {
-        base.ResumeActions();
-        _isAttacking = false;
-        _isIdle = false;
+        StartCoroutine(WaitAndExecuteFunction(GetCurrentAnimationRemainingLength(), () =>
+         {
+             currentState = states.Pop();
+             _isAttacking = false;
+             _isIdle = false;
+         }));
     }
 
 

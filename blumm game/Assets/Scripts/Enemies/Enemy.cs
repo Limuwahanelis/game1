@@ -18,6 +18,7 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
     public event Action<string, bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
+    public event Func<float> OnGetAnimationRemainingTime;
 
     protected EnemyEnums.State currentState;
     protected Stack<EnemyEnums.State> states = new Stack<EnemyEnums.State>();
@@ -82,5 +83,10 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
     public float GetAnimationLength(string name)
     {
         return (float)OnGetAnimationLength?.Invoke(name);
+    }
+
+    protected float GetCurrentAnimationRemainingLength()
+    {
+        return (float)OnGetAnimationRemainingTime?.Invoke();
     }
 }

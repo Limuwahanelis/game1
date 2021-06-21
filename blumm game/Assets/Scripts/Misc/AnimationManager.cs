@@ -21,6 +21,7 @@ public class AnimationManager : MonoBehaviour
        _objectToAnimate.OnPlayAnimation += PlayAnimation;
         _objectToAnimate.OnGetAnimationLength += GetStateLength;
         _objectToAnimate.OnOverPlayAnimation+= OverPlayAnimation;
+        _objectToAnimate.OnGetAnimationRemainingTime+= GetCurrentStateRemainingTime;
        _anim = GetComponent<Animator>();
         
     }
@@ -98,6 +99,8 @@ public class AnimationManager : MonoBehaviour
     {
         _objectToAnimate.OnPlayAnimation -= PlayAnimation;
         _objectToAnimate.OnGetAnimationLength -= GetStateLength;
+        _objectToAnimate.OnOverPlayAnimation -= OverPlayAnimation;
+        _objectToAnimate.OnGetAnimationRemainingTime -= GetCurrentStateRemainingTime;
     }
     public float GetStateLength(string name)
     {
@@ -110,6 +113,11 @@ public class AnimationManager : MonoBehaviour
             }
         }
         return clipDuration;
+    }
+
+    public float GetCurrentStateRemainingTime()
+    {
+        return _anim.GetCurrentAnimatorStateInfo(0).normalizedTime * _animLength;
     }
 
     IEnumerator TimerCor(float time,Action functionToPerform)

@@ -10,6 +10,7 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
+    public event Func<float> OnGetAnimationRemainingTime;
 
     public void Interact()
     {
