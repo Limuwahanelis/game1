@@ -28,7 +28,7 @@ public class PlayerCombat : MonoBehaviour
         if (!_player.isAttacking && _player.isOnGround)
         {
             _player.playerMovement.StopPlayer();
-            Collider2D[] hitEnemies =Physics2D.OverlapBoxAll(attackPos.position,new Vector2(attackRangeX,attackRangeY), enemyLayer);
+            Collider2D[] hitEnemies =Physics2D.OverlapBoxAll(attackPos.position,new Vector2(attackRangeX,attackRangeY),0 ,enemyLayer);
             for(int i=0;i<hitEnemies.Length;i++)
             {
                 IDamagable enemy = hitEnemies[i].GetComponentInParent<IDamagable>();
@@ -50,6 +50,7 @@ public class PlayerCombat : MonoBehaviour
     {
         _player.StopAllActions();
         _player.PlayAnimation("Death");
+        _player.isAlive = false;
     }
     private IEnumerator InvincibilityCor()
     {

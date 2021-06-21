@@ -13,6 +13,7 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
 
     protected bool _isAlive = true;
     protected bool _isIdle = false;
+    protected bool _isHit = false;
 
     public event Action<string, bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
@@ -37,7 +38,28 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
         currentState = states.Pop();
     }
 
+    protected virtual void Kill()
+    {
+        StopCurrentActions();
+        _isAlive = false;
+        currentState = EnemyEnums.State.DEAD;
+        PlayAnimation("Death");
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Death"), () => Destroy(gameObject)));
+    }
 
+    protected virtual void Hit()
+    {
+        StopCurrentActions();
+        states.Push(currentState);
+        _isHit = true;
+        PlayAnimation("Hit");
+        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Hit"), () =>
+        {
+            states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
+            _isHit = false;
+            ResumeActions();
+        }));
+    }
 
     protected IEnumerator StayIdleCor(int numberOfIdleCycles = 1)
     {

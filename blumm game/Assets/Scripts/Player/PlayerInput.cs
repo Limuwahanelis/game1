@@ -16,14 +16,17 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         float direction = Input.GetAxisRaw("Horizontal");
-        player.playerMovement.MovePlayer(direction);
-        if(Input.GetButtonDown("Jump"))
+        if (player.isAlive)
         {
-            player.playerMovement.Jump();
-        }
-        if(Input.GetButtonDown("Attack"))
-        {
-            player.playerCombat.Attack();
+            player.playerMovement.MovePlayer(direction);
+            if (Input.GetButtonDown("Jump"))
+            {
+                player.playerMovement.Jump();
+            }
+            if (Input.GetButtonDown("Attack"))
+            {
+                player.playerCombat.Attack();
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ public class Mushroom : PatrollingEnemy, IAnimatable
 {
 
     
-    private bool _isHit = false;
+    
    
 
     // Start is called before the first frame update
@@ -20,8 +20,8 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     protected override void SetUpComponents()
     {
         hpSys = GetComponent<HealthSystem>();
-        hpSys.OnDeath += KillEnemy;
-        hpSys.OnHit += HitEnemy;
+        hpSys.OnDeath += Kill;
+        hpSys.OnHit += Hit;
     }
 
     // Update is called once per frame
@@ -50,37 +50,13 @@ public class Mushroom : PatrollingEnemy, IAnimatable
                 }
             }
         }
-        else
-        {
-            Destroy(gameObject);
-        }
     }
     private void StayIdleAfterHit()
     {
         StartCoroutine(StayIdleCor());
         StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Idle"), ResumeActions));
     }
-    private void KillEnemy()
-    {
-        _isHit = true;
-        StopCurrentActions();
-        PlayAnimation("Death");
-        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Death"), () => _isAlive = false));
-    }
 
-    private void HitEnemy()
-    {
-        StopCurrentActions();
-        states.Push(currentState);
-        _isHit = true;
-        PlayAnimation("Hit");
-        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Hit"), () =>
-        {
-            states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
-            _isHit = false;
-            ResumeActions();
-        }));
-    }
 
     protected override void StopCurrentActions()
     {
@@ -92,19 +68,5 @@ public class Mushroom : PatrollingEnemy, IAnimatable
     {
         base.ResumeActions();
         _isIdle = false;
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
-        IPushable tmp2 = collision.gameObject.GetComponentInParent<IPushable>();
-        
-        if (tmp != null)
-        {
-            tmp.TakeDamage(collisionDmg);
-            
-        }
-        if (tmp2 != null) tmp2.Push(gameObject);
     }
 }

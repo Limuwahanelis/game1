@@ -23,11 +23,14 @@ public class Player : MonoBehaviour, IAnimatable
     public HealthSystem playerHealth;
 
     [HideInInspector]
+    public bool isAlive = true;
+    [HideInInspector]
     public bool isMoving;
     [HideInInspector]
     public bool isJumping;
     [HideInInspector]
     public bool isMovableByPlayer = true;
+    [HideInInspector]
     public bool isOnGround;
     [HideInInspector]
     public bool isFalling;
@@ -56,33 +59,36 @@ public class Player : MonoBehaviour, IAnimatable
     // Update is called once per frame
     void Update()
     {
-        if (isMovableByPlayer)
+        if (isAlive)
         {
-            if (isOnGround)
+            if (isMovableByPlayer)
             {
-
-                if (isMoving) PlayAnimation("Walk");
-                else PlayAnimation("Idle");
-                if (isAttacking)
+                if (isOnGround)
                 {
-                    TakeControlFromPlayer(Cause.ATTACK);
-                    PlayAnimation("Attack");
-                    StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Attack"), () =>
-                     {
-                         isAttacking = !isAttacking;
-                         ReturnControlToPlayer(Cause.ATTACK);
-                     }));
+
+                    if (isMoving) PlayAnimation("Walk");
+                    else PlayAnimation("Idle");
+                    if (isAttacking)
+                    {
+                        TakeControlFromPlayer(Cause.ATTACK);
+                        PlayAnimation("Attack");
+                        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Attack"), () =>
+                         {
+                             isAttacking = !isAttacking;
+                             ReturnControlToPlayer(Cause.ATTACK);
+                         }));
+                    }
+
+                }
+            }
+            if (!isOnGround)
+            {
+                if (isFalling)
+                {
+                    if (!isPushedBack) PlayAnimation("Fall");
                 }
 
             }
-        }
-        if (!isOnGround)
-        {
-            if (isFalling)
-            {
-                if(!isPushedBack) PlayAnimation("Fall");
-            }
-                
         }
     }
 
@@ -151,6 +157,7 @@ public class Player : MonoBehaviour, IAnimatable
             playerCombat.KillPlayer();
             yield break;
         }
+        playerMovement.StopPlayerOnXAxis();
         ReturnControlToPlayer(Cause.COLLISION);
         isPushedBack = false;
     }

@@ -16,7 +16,6 @@ public class Goblin : PatrollingEnemy
 
     public LayerMask playerCoreLayer;
 
-    private bool _isHit = false;
     
     private bool _isCheckingForPlayerCol;
     private bool _isAttacking;
@@ -40,7 +39,7 @@ public class Goblin : PatrollingEnemy
         _detection = GetComponentInChildren<PlayerDetection>();
         _detection.OnPlayerDetected = SetPlayerInRange;
         _detection.OnPlayerLeft = SetPlayerNotInRange;
-        hpSys.OnHit += HitEnemy;
+        hpSys.OnHit += Hit;
         hpSys.OnDeath = Kill;
     }
 
@@ -113,31 +112,6 @@ public class Goblin : PatrollingEnemy
         }
         yield return null;
     }
-
-    private void HitEnemy()
-    {
-        StopCurrentActions();
-        Debug.Log("hit");
-        states.Push(currentState);
-        _isHit = true;
-        PlayAnimation("Hit");
-        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Hit"), () =>
-        {
-            states.Push(EnemyEnums.State.IDLE_AFTER_HIT);
-            _isHit = false;
-            ResumeActions();
-        }));
-    }
-
-    private void Kill()
-    {
-        StopCurrentActions();
-        _isAlive = false;
-        currentState = EnemyEnums.State.DEAD;
-        PlayAnimation("Death");
-        StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Death"),()=> Destroy(gameObject)));
-
-    }
     public void StartCheckingForPlayerCol()
     {
         _isCheckingForPlayerCol = true;
@@ -178,18 +152,7 @@ public class Goblin : PatrollingEnemy
         _isIdle = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
-        IPushable tmp2 = collision.gameObject.GetComponentInParent<IPushable>();
 
-        if (tmp != null)
-        {
-            tmp.TakeDamage(collisionDmg);
-
-        }
-        if (tmp2 != null) tmp2.Push(gameObject);
-    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(_attackTransform.position, new Vector3(_attackRangeX, _attackRangeY));
