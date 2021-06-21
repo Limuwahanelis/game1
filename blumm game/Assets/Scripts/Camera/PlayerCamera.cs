@@ -10,11 +10,13 @@ public class PlayerCamera : MonoBehaviour
 
     public Transform leftScreenBorder;
     public Transform rightScreenBorder;
-
+    public Transform upperScreenBorder;
+    public Transform lowerScreenBorder;
 
     public float smoothTime = 0.3f;
 
     private bool _followOnXAxis=true;
+    private bool _followOnYAxis = true;
     private Vector3 targetPos;
     
     private Vector3 velocity = Vector3.zero;
@@ -27,33 +29,62 @@ public class PlayerCamera : MonoBehaviour
         if(player.transform.position.x<leftScreenBorder.position.x)
         {
             _followOnXAxis = false;
-            targetPos = new Vector3(leftScreenBorder.position.x, player.transform.position.y) + offset;
+            targetPos = new Vector3(leftScreenBorder.position.x, player.transform.position.y);
         }
         else
         {
-            if (player.transform.position.x > rightScreenBorder.position.x)
-            {
-                _followOnXAxis = false;
-                targetPos = new Vector3(rightScreenBorder.position.x, player.transform.position.y) + offset;
-            }
-            else
-            {
-                _followOnXAxis = true;
-            }
+            CheckIfPlayerIsOnRightScreenBorder();
         }
 
+        if(player.transform.position.y<lowerScreenBorder.position.y)
+        {
+            _followOnYAxis = false;
+            targetPos = new Vector3(targetPos.x, lowerScreenBorder.position.y, targetPos.z);
 
-
-
+        }
+        else
+        {
+            CheckIfPlayerIsOnUpperScreenBorder();
+        }
 
     }
     private void LateUpdate()
     {
         if(_followOnXAxis)
         {
-            targetPos = new Vector3( player.transform.position.x, player.transform.position.y)+offset;
+            targetPos = new Vector3( player.transform.position.x, targetPos.y);
         }
+        if(_followOnYAxis)
+        {
+            targetPos = new Vector3(targetPos.x, player.transform.position.y);
+        }
+        targetPos += offset;
         transform.position = Vector3.SmoothDamp(transform.position, targetPos,ref velocity, smoothTime);
 
+    }
+
+    private void CheckIfPlayerIsOnRightScreenBorder()
+    {
+        if (player.transform.position.x > rightScreenBorder.position.x)
+        {
+            _followOnXAxis = false;
+            targetPos = new Vector3(rightScreenBorder.position.x, player.transform.position.y);
+        }
+        else
+        {
+            _followOnXAxis = true;
+        }
+    }
+    private void CheckIfPlayerIsOnUpperScreenBorder()
+    {
+        if (player.transform.position.y > upperScreenBorder.position.y)
+        {
+            _followOnYAxis = false;
+            targetPos = new Vector3(targetPos.x, upperScreenBorder.position.y,targetPos.z);
+        }
+        else
+        {
+            _followOnYAxis = true;
+        }
     }
 }
