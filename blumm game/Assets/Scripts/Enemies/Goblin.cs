@@ -178,7 +178,18 @@ public class Goblin : PatrollingEnemy
         _isIdle = false;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        IDamagable tmp = collision.gameObject.GetComponentInParent<IDamagable>();
+        IPushable tmp2 = collision.gameObject.GetComponentInParent<IPushable>();
 
+        if (tmp != null)
+        {
+            tmp.TakeDamage(collisionDmg);
+
+        }
+        if (tmp2 != null) tmp2.Push(gameObject);
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(_attackTransform.position, new Vector3(_attackRangeX, _attackRangeY));
