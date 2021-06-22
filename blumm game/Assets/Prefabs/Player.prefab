@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3705309150745419874}
   - component: {fileID: 8026101652253054965}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Capsule collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7860446477691603418}
   - component: {fileID: 7860446477691603417}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Box collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,6 +431,8 @@ MonoBehaviour:
   isPushedBack: 0
   isHit: 0
   isNearWall: 0
+  checkForLastPush: 0
+  performedLastPush: 0
 --- !u!114 &7860446478177638941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,6 +522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInvincible: 0
+  isPushable: 1
   maxHP:
     useConstant: 0
     constantValue: 0

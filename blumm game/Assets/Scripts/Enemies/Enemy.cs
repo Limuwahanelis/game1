@@ -11,6 +11,8 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
     public int dmg;
     public int collisionDmg;
 
+    public GameObject mainCollider;
+
     protected bool _isAlive = true;
     protected bool _isIdle = false;
     protected bool _isHit = false;
@@ -42,6 +44,7 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
     protected virtual void Kill()
     {
         StopCurrentActions();
+        mainCollider.SetActive(false);
         _isAlive = false;
         currentState = EnemyEnums.State.DEAD;
         PlayAnimation("Death");

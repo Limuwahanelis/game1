@@ -174,6 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3812ac76141db564ba266b16d38b196a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionDmg: 1
 --- !u!1 &8681547891445100888
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,6 +225,7 @@ MonoBehaviour:
   speed: 1.5
   dmg: 0
   collisionDmg: 1
+  mainCollider: {fileID: 8681547891225222334}
   idleCycles: 0
   patrolPoints: []
 --- !u!114 &8681547891445100867
@@ -239,6 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInvincible: 0
+  isPushable: 1
   maxHP:
     useConstant: 1
     constantValue: 3

@@ -37,16 +37,12 @@ public class SpikeTrap : MonoBehaviour
     {
         if (_moveSpikes)
         {
-            if (!Physics2D.OverlapBox(groundCheck.transform.position, new Vector2(groundCheckSizeX, groundCheckSizeY), 0, groundLayer))
+            transform.position = Vector2.MoveTowards(transform.position, placeToFallToPos, speed * Time.deltaTime);
+            if (Mathf.Abs(transform.position.y - placeToFallToPos.y) < 0.1f)
             {
-
-                transform.position = Vector2.MoveTowards(transform.position, placeToFallToPos, speed * Time.deltaTime);
-                if (Mathf.Abs(transform.position.y - placeToFallToPos.y) < 0.1f)
-                {
-                    transform.position = placeToFallToPos;
-                    _moveSpikes = false;
-                    StartCoroutine(ChangeColliderToGroundCol());
-                }
+                transform.position = placeToFallToPos;
+                _moveSpikes = false;
+                StartCoroutine(ChangeColliderToGroundCol());
             }
         }
     }

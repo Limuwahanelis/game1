@@ -21,7 +21,6 @@ public class Player : MonoBehaviour, IAnimatable
     public PlayerMovement playerMovement;
     public PlayerCombat playerCombat;
     public HealthSystem playerHealth;
-    public PlayerCollisions playerCollisions;
 
     public PhysicsMaterial2D noFrictionMat;
     public PhysicsMaterial2D normalMat;

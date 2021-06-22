@@ -11,17 +11,22 @@ public class HealthBar : MonoBehaviour
     
     public PlayerLife playerLifePrefab;
     public float heartDistance;
+
+    public Vector2 playerLifesPosition;
+
     private int _previousHealth;
     private void Start()
     {
-        heartDistance = playerLifePrefab.GetComponent<RectTransform>().rect.width/2 +10;
+        
+        heartDistance = playerLifePrefab.GetComponent<RectTransform>().rect.width;
+        Debug.Log(heartDistance);
+        Debug.Log(Screen.currentResolution);
         _previousHealth = currentHP.value;
-        if (lives.Count < currentHP.value)
+        for(int i=0;i<currentHP.value;i++)
         {
-            for (int i = 0; i < currentHP.value; i++)
-            {
-                lives.Add(Instantiate(playerLifePrefab, lives.Count == 0 ? transform.position : lives[lives.Count - 1].transform.position + new Vector3(heartDistance, 0f), playerLifePrefab.transform.rotation, transform));
-            }
+            lives.Add(Instantiate(playerLifePrefab, GetComponent<RectTransform>()));
+            lives[i].GetComponent<RectTransform>().anchoredPosition = playerLifesPosition;
+            playerLifesPosition.x += heartDistance;
         }
     }
 
