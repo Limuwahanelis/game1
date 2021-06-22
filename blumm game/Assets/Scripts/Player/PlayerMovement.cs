@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float _jumpForce;
 
+
     private float _flipSide = 1; // 1- right, -1 - left
     private float _previousDirection;
 
@@ -84,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
                 _player.isJumping = !_player.isJumping;
                 _player.ReturnControlToPlayer(Player.Cause.JUMP);
             }));
+            StartCoroutine(WaitForLiftOff());
         }
     }
 
@@ -91,6 +93,8 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb.AddForce(new Vector2(0, _jumpForce));
         GameObject tmp= Instantiate(jumpEffectPrefab, jumpEffectPos.position, jumpEffectPrefab.transform.rotation);
+        ChangePhysicsMaterial(_player.noFrictionMat);
+        //StartCoroutine(WaitForPlayerToLandAfterJump());
         Destroy(tmp, 1f);
     }
     public void CollidedWithEnemy(GameObject enemy)
@@ -103,5 +107,23 @@ public class PlayerMovement : MonoBehaviour
         Vector2 pushVector = new Vector2(tmp.x * pushDirection, tmp.y)*_pushForce;
         _rb.AddForce(pushVector,ForceMode2D.Impulse);
         StartCoroutine(_player.WaitForPlayerToLandOnGroundAfterPush());
+    }
+
+    public void ChangePhysicsMaterial(PhysicsMaterial2D mat)
+    {
+        _rb.sharedMaterial = mat;
+    }
+
+    IEnumerator WaitForPlayerToLandAfterJump()
+    {
+        while (_player.isJumping) yield return null;
+        while (!_player.isOnGround) yield return null;
+        ChangePhysicsMaterial(_player.normalMat);
+    }
+
+    IEnumerator WaitForLiftOff()
+    {
+        while (_player.isOnGround) yield return null;
+        ChangePhysicsMaterial(_player.noFrictionMat);
     }
 }

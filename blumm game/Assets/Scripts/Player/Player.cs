@@ -22,6 +22,9 @@ public class Player : MonoBehaviour, IAnimatable
     public PlayerCombat playerCombat;
     public HealthSystem playerHealth;
 
+    public PhysicsMaterial2D noFrictionMat;
+    public PhysicsMaterial2D normalMat;
+
     [HideInInspector]
     public bool isAlive = true;
     [HideInInspector]
@@ -30,7 +33,6 @@ public class Player : MonoBehaviour, IAnimatable
     public bool isJumping;
     [HideInInspector]
     public bool isMovableByPlayer = true;
-    [HideInInspector]
     public bool isOnGround;
     [HideInInspector]
     public bool isFalling;
@@ -40,6 +42,8 @@ public class Player : MonoBehaviour, IAnimatable
     public bool isPushedBack;
     [HideInInspector]
     public bool isHit;
+    [HideInInspector]
+    public bool isNearWall;
 
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
@@ -66,7 +70,7 @@ public class Player : MonoBehaviour, IAnimatable
             {
                 if (isOnGround)
                 {
-
+                    playerMovement.ChangePhysicsMaterial(normalMat);
                     if (isMoving) PlayAnimation("Walk");
                     else PlayAnimation("Idle");
                     if (isAttacking)
@@ -90,7 +94,13 @@ public class Player : MonoBehaviour, IAnimatable
                 }
 
             }
+
+
+            if (isNearWall) playerMovement.ChangePhysicsMaterial(noFrictionMat);
         }
+
+
+
     }
 
     public void ReturnControlToPlayer(Cause returnControlCause)
