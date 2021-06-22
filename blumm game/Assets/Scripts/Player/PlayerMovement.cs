@@ -99,14 +99,27 @@ public class PlayerMovement : MonoBehaviour
     }
     public void CollidedWithEnemy(GameObject enemy)
     {
-        _player.TakeControlFromPlayer(Player.Cause.COLLISION);
-        _player.isPushedBack = true;
-        float pushDirection = 1;
-        if (enemy.transform.position.x > transform.position.x) pushDirection = -1;
-        Vector2 tmp = t2.position - transform.position;
-        Vector2 pushVector = new Vector2(tmp.x * pushDirection, tmp.y)*_pushForce;
-        _rb.AddForce(pushVector,ForceMode2D.Impulse);
-        StartCoroutine(_player.WaitForPlayerToLandOnGroundAfterPush());
+        if (!_player.performedLastPush)
+        {
+            if (_player.checkForLastPush)
+            {
+                _player.performedLastPush = true;
+            }
+            //if (!_player.isAlive)
+            //{
+                _player.TakeControlFromPlayer(Player.Cause.COLLISION);
+            //}
+            _player.isPushedBack = true;
+
+            float pushDirection = 1;
+            if (enemy.transform.position.x > transform.position.x) pushDirection = -1;
+
+            Vector2 tmp = t2.position - transform.position;
+            Vector2 pushVector = new Vector2(tmp.x * pushDirection, tmp.y) * _pushForce;
+
+            _rb.AddForce(pushVector, ForceMode2D.Impulse);
+            StartCoroutine(_player.WaitForPlayerToLandOnGroundAfterPush());
+        }
     }
 
     public void ChangePhysicsMaterial(PhysicsMaterial2D mat)

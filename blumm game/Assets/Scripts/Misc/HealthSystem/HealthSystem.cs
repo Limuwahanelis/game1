@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class HealthSystem : MonoBehaviour, IDamagable,IPushable
 {
     public bool isInvincible;
+    public bool isPushable = true;
     public IntReference maxHP;
     public IntReference currentHP;
     public Action OnHit;
@@ -39,6 +40,6 @@ public class HealthSystem : MonoBehaviour, IDamagable,IPushable
 
     public void Push(GameObject pusher)
     {
-        OnPush?.Invoke(pusher);
+        if(isPushable) OnPush?.Invoke(pusher);
     }
 }

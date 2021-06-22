@@ -11,6 +11,9 @@ public class PlayerCombat : MonoBehaviour
     public float InvincibilityTime;
     public LayerMask enemyLayer;
     public int dmg;
+
+    public Coroutine invincibilityCor;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,21 +46,43 @@ public class PlayerCombat : MonoBehaviour
         _player.TakeControlFromPlayer(Player.Cause.ENEMY);
         StartCoroutine(_player.WaitAndExecuteFunction(_player.GetAnimationLength("Hit"),()=> { _player.ReturnControlToPlayer(Player.Cause.ENEMY); }));
         _player.OverPlayAnimation("Hit");
-        StartCoroutine(InvincibilityCor());
+        invincibilityCor=StartCoroutine(InvincibilityCor());
     }
 
     public void KillPlayer()
     {
-        _player.StopAllActions();
-        _player.PlayAnimation("Death");
-        _player.isAlive = false;
+        _player.playerHealth.isInvincible = true;
+        if(!_player.checkForLastPush)
+        {
+            _player.checkForLastPush = true;
+            StartCoroutine(CheckForLatPushCor());
+            return;
+        }
+        if (_player.checkForLastPush)
+        {
+            _player.StopAllActions();
+            _player.PlayAnimation("Death");
+            _player.isAlive = false;
+        }
     }
-    private IEnumerator InvincibilityCor()
+    public IEnumerator InvincibilityCor()
     {
         if (_player.playerHealth.isInvincible) yield break;
         else _player.playerHealth.isInvincible = true;
         yield return new WaitForSeconds(InvincibilityTime);
         _player.playerHealth.isInvincible = false;
+    }
+    public IEnumerator NotPushableCor()
+    {
+        if (!_player.playerHealth.isPushable) yield break;
+        _player.playerHealth.isPushable = false;
+        yield return new WaitForSeconds(InvincibilityTime);
+        _player.playerHealth.isPushable = true;
+    }
+    private IEnumerator CheckForLatPushCor()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (_player.checkForLastPush) KillPlayer();
     }
     private void OnDrawGizmos()
     {

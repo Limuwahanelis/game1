@@ -8,6 +8,8 @@ public class PlayerCamera : MonoBehaviour
 
     public Vector3 offset;
 
+
+    public bool CheckForBorders = true;
     public Transform leftScreenBorder;
     public Transform rightScreenBorder;
     public Transform upperScreenBorder;
@@ -26,37 +28,47 @@ public class PlayerCamera : MonoBehaviour
     }
     private void Update()
     {
-        if(player.transform.position.x<leftScreenBorder.position.x)
+        if (CheckForBorders)
         {
-            _followOnXAxis = false;
-            targetPos = new Vector3(leftScreenBorder.position.x, player.transform.position.y);
-        }
-        else
-        {
-            CheckIfPlayerIsOnRightScreenBorder();
-        }
+            if (player.transform.position.x < leftScreenBorder.position.x)
+            {
+                _followOnXAxis = false;
+                targetPos = new Vector3(leftScreenBorder.position.x, player.transform.position.y);
+            }
+            else
+            {
+                CheckIfPlayerIsOnRightScreenBorder();
+            }
 
-        if(player.transform.position.y<lowerScreenBorder.position.y)
-        {
-            _followOnYAxis = false;
-            targetPos = new Vector3(targetPos.x, lowerScreenBorder.position.y, targetPos.z);
+            if (player.transform.position.y < lowerScreenBorder.position.y)
+            {
+                _followOnYAxis = false;
+                targetPos = new Vector3(targetPos.x, lowerScreenBorder.position.y, targetPos.z);
 
+            }
+            else
+            {
+                CheckIfPlayerIsOnUpperScreenBorder();
+            }
         }
-        else
-        {
-            CheckIfPlayerIsOnUpperScreenBorder();
-        }
-
+        
     }
     private void LateUpdate()
     {
-        if(_followOnXAxis)
+        if (CheckForBorders)
         {
-            targetPos = new Vector3( player.transform.position.x, targetPos.y);
+            if (_followOnXAxis)
+            {
+                targetPos = new Vector3(player.transform.position.x, targetPos.y);
+            }
+            if (_followOnYAxis)
+            {
+                targetPos = new Vector3(targetPos.x, player.transform.position.y);
+            }
         }
-        if(_followOnYAxis)
+        else
         {
-            targetPos = new Vector3(targetPos.x, player.transform.position.y);
+            targetPos = player.transform.position;
         }
         if (Mathf.Abs(targetPos.x - transform.position.x) > 0.3 || Mathf.Abs(targetPos.y - transform.position.y) > 0.3)
         {

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerCollisions : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject _enemyCollisionCollider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +18,10 @@ public class PlayerCollisions : MonoBehaviour
     {
         
     }
+
+    public void SetEnemyCollisions(bool set)
+    {
+        _enemyCollisionCollider.SetActive(set);
+    }
+
 }

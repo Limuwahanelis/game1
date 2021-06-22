@@ -21,6 +21,7 @@ public class Player : MonoBehaviour, IAnimatable
     public PlayerMovement playerMovement;
     public PlayerCombat playerCombat;
     public HealthSystem playerHealth;
+    public PlayerCollisions playerCollisions;
 
     public PhysicsMaterial2D noFrictionMat;
     public PhysicsMaterial2D normalMat;
@@ -44,6 +45,9 @@ public class Player : MonoBehaviour, IAnimatable
     public bool isHit;
     [HideInInspector]
     public bool isNearWall;
+
+    public bool checkForLastPush = false;
+    public bool performedLastPush = false;
 
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
@@ -155,6 +159,14 @@ public class Player : MonoBehaviour, IAnimatable
     public IEnumerator WaitForPlayerToLandOnGroundAfterPush()
     {
         PlayAnimation("Hit");
+        if (playerCombat.invincibilityCor != null) playerCombat.StopCoroutine(playerCombat.invincibilityCor);
+        if(playerHealth.currentHP.value<=0)
+        {
+            playerCombat.StopAllCoroutines();
+        }
+        //playerCollisions.SetEnemyCollisions(false);
+        playerHealth.isPushable = false;
+        playerHealth.isInvincible = true;
         while (isOnGround)
         {
             yield return null;
@@ -163,6 +175,12 @@ public class Player : MonoBehaviour, IAnimatable
         {
             yield return null;
         }
+        playerHealth.isPushable = true;
+        playerCombat.StartCoroutine(playerCombat.NotPushableCor());
+        //playerCollisions.SetEnemyCollisions(true);
+        playerHealth.isInvincible = false;
+        playerCombat.invincibilityCor = playerCombat.StartCoroutine(playerCombat.InvincibilityCor());
+        
         if(playerHealth.currentHP.value<=0)
         {
             playerCombat.KillPlayer();

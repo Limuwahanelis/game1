@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class SpikeTrap : MonoBehaviour
 {
+    public float speed;
+    public int dmg;
+    public LayerMask groundLayer;
 
     public PlayerDetection playerDetection;
     public Collider2D col;
     public GameObject blockCollider;
     public Transform spikes;
-
+    public Transform placeToFallTo;
+    public Vector2 placeToFallToPos;
     private bool _moveSpikes=false;
-    public float speed;
-    public int dmg;
+
 
 
     public Transform groundCheck;
     public float groundCheckSizeX;
     public float groundCheckSizeY;
 
-    public LayerMask groundLayer;
 
     private Rigidbody2D _rb;
     // Start is called before the first frame update
@@ -27,6 +29,7 @@ public class SpikeTrap : MonoBehaviour
     {
         playerDetection.OnPlayerDetected = StartTrap;
         _rb = GetComponent<Rigidbody2D>();
+        placeToFallToPos = placeToFallTo.position;
     }
 
     // Update is called once per frame
@@ -37,13 +40,13 @@ public class SpikeTrap : MonoBehaviour
             if (!Physics2D.OverlapBox(groundCheck.transform.position, new Vector2(groundCheckSizeX, groundCheckSizeY), 0, groundLayer))
             {
 
-                transform.Translate(Vector3.down * Time.deltaTime * speed);
-            }
-            else
-            {
-                _moveSpikes = false;
-                col.enabled = false;
-                blockCollider.SetActive( true);
+                transform.position = Vector2.MoveTowards(transform.position, placeToFallToPos, speed * Time.deltaTime);
+                if (Mathf.Abs(transform.position.y - placeToFallToPos.y) < 0.1f)
+                {
+                    transform.position = placeToFallToPos;
+                    _moveSpikes = false;
+                    StartCoroutine(ChangeColliderToGroundCol());
+                }
             }
         }
     }
@@ -57,20 +60,14 @@ public class SpikeTrap : MonoBehaviour
     {
         Gizmos.DrawWireCube(groundCheck.transform.position, new Vector2(groundCheckSizeX, groundCheckSizeY));
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    IEnumerator ChangeColliderToGroundCol()
     {
-        
-        IDamagable target = collision.GetComponentInParent<IDamagable>();
-        if(target!=null)
-        {
-            target.TakeDamage(dmg);
-        }
+        yield return new WaitForSeconds(1f);
+        col.enabled = false;
+        blockCollider.SetActive(true);
+
     }
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Debug.Log("Foo");
-    //    blockCollider.SetActive(true);
-    //}
 
 }
 
