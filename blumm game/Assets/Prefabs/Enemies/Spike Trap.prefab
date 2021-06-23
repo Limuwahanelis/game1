@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &695299918953443360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7761122597090414185}
+  m_Layer: 7
+  m_Name: Effect pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7761122597090414185
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695299918953443360}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.476, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 986454364629222571}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &986454364514318487
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +145,7 @@ Transform:
   - {fileID: 986454365485374913}
   - {fileID: 986454364681660766}
   - {fileID: 986454365018034191}
+  - {fileID: 7761122597090414185}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -136,11 +167,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   playerDetection: {fileID: 986454364681660752}
-  col: {fileID: 986454365695081678}
+  col: {fileID: 986454364629222573}
   blockCollider: {fileID: 986454365695081664}
   spikes: {fileID: 986454365485374913}
   placeToFallTo: {fileID: 986454365018034191}
   placeToFallToPos: {x: 0, y: 0}
+  spikeHitGroundEffectPrefab: {fileID: 8060357283961221233, guid: b9beca5ba24e0d745bf1adf8f81419e8, type: 3}
+  spikeHitGroundEffectTransform: {fileID: 7761122597090414185}
   groundCheck: {fileID: 986454365929677385}
   groundCheckSizeX: 1
   groundCheckSizeY: 0.2

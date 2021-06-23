@@ -2,15 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class Coin : MonoBehaviour,IInteractable,IAnimatable
+public class Coin : MonoBehaviour,IAnimatable,IInteractable
 {
     public CoinCustomSet set;
     public Action OnPickUpEvent;
+    private PlayerDetection detection;
+    private PartOfPool pool;
 
     public event Action<string,bool> OnPlayAnimation;
     public event Func<string, float> OnGetAnimationLength;
     public event Action<string> OnOverPlayAnimation;
     public event Func<float> OnGetAnimationRemainingTime;
+
+    private void Start()
+    {
+        detection = GetComponent<PlayerDetection>();
+        pool = GetComponent<PartOfPool>();
+        if (detection != null) detection.OnPlayerDetected = Interact;
+        //else Interact();
+    }
+
+    private void Awake()
+    {
+        set.Add(this);
+    }
 
     public void Interact()
     {
@@ -18,25 +33,22 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
         StartCoroutine(WaitForAnimationToEnd(GetAnimationLength("PickUp")));
     }
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-        set.Add(this);
-    }
 
-    private void OnEnable()
-    {
-        set.Add(this);
-    }
 
-    private void OnDisable()
+    IEnumerator WaitForAnimationToEnd(float time)
     {
-        set.Remove(this);
-    }
+        yield return new WaitForSeconds(time);
+        OnPickUpEvent?.Invoke();
+        if (pool == null)
+        {
+            Destroy(gameObject);
+            set.Remove(this);
+        }
+        else
+        {
+            pool.ReturnToPool();
+        }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Interact();
     }
 
     public void PlayAnimation(string name, bool canBePlayedOver = true)
@@ -49,11 +61,8 @@ public class Coin : MonoBehaviour,IInteractable,IAnimatable
         return (float)OnGetAnimationLength?.Invoke(name);
     }
 
-    IEnumerator WaitForAnimationToEnd(float time)
+    private void OnDestroy()
     {
-        yield return new WaitForSeconds(time);
-        OnPickUpEvent?.Invoke();
         set.Remove(this);
-        Destroy(gameObject);
     }
 }

@@ -14,6 +14,10 @@ public class SpikeTrap : MonoBehaviour
     public Transform spikes;
     public Transform placeToFallTo;
     public Vector2 placeToFallToPos;
+    public GameObject spikeHitGroundEffectPrefab;
+    public Transform spikeHitGroundEffectTransform;
+
+    private Vector3 spikeHitGroundEffectPos;
     private bool _moveSpikes=false;
 
 
@@ -30,6 +34,7 @@ public class SpikeTrap : MonoBehaviour
         playerDetection.OnPlayerDetected = StartTrap;
         _rb = GetComponent<Rigidbody2D>();
         placeToFallToPos = placeToFallTo.position;
+        spikeHitGroundEffectPos = spikeHitGroundEffectTransform.position;
     }
 
     // Update is called once per frame
@@ -42,7 +47,10 @@ public class SpikeTrap : MonoBehaviour
             {
                 transform.position = placeToFallToPos;
                 _moveSpikes = false;
+                spikeHitGroundEffectPos = spikeHitGroundEffectTransform.position;
+                GameObject tmp= Instantiate(spikeHitGroundEffectPrefab, spikeHitGroundEffectPos, spikeHitGroundEffectPrefab.transform.rotation);
                 StartCoroutine(ChangeColliderToGroundCol());
+                Destroy(tmp, 1f);
             }
         }
     }
