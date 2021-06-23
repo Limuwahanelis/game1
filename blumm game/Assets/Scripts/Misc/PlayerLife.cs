@@ -10,10 +10,10 @@ public class PlayerLife : MonoBehaviour
     public Sprite fullHealth;
     public Sprite emptyHealth;
     private Image image;
-    private void Start()
+
+    private void Awake()
     {
         image = GetComponent<Image>();
-        
     }
 
     public void ChangeHeart(bool toEmpty)

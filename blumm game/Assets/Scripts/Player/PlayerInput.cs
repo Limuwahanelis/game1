@@ -6,7 +6,6 @@ public class PlayerInput : MonoBehaviour
 {
 
     public Player player;
-    public BoolReference isGamePaused;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +16,7 @@ public class PlayerInput : MonoBehaviour
     void Update()
     {
         float direction = Input.GetAxisRaw("Horizontal");
-        if (!isGamePaused.value)
+        if (!PauseMenu.isGamePaused)
         {
             if (player.isAlive)
             {

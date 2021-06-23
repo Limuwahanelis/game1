@@ -11,7 +11,6 @@ public abstract class Lootbox : MonoBehaviour,IAnimatable,IInteractable
     public event Func<float> OnGetAnimationRemainingTime;
     public event Action<string> OnOverPlayAnimation;
 
-    public event Action<int> OnOpenBox;
     public Transform SpawnTransform;
     public int amountOfitems;
 
