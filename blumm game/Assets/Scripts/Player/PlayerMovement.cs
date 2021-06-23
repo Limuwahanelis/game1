@@ -73,6 +73,11 @@ public class PlayerMovement : MonoBehaviour
         _player.isMoving = false;
         _rb.velocity = new Vector2(0, _rb.velocity.y);
     }
+    public void StopPlayerOnYAxis()
+    {
+        _player.isMoving = false;
+        _rb.velocity = new Vector2(_rb.velocity.x,0 );
+    }
     public void Jump()
     {
         if (!_player.isJumping && _player.isOnGround)
@@ -87,8 +92,22 @@ public class PlayerMovement : MonoBehaviour
             }));
             StartCoroutine(WaitForLiftOff());
         }
+        if(!_player.isOnGround && _player.canDoubleJump &&!_player.isJumping)
+        {
+            DoubleJump();
+        }
     }
 
+    public void DoubleJump()
+    {
+        StopPlayerOnYAxis();
+        _rb.AddForce(new Vector2(0, _jumpForce));
+        _player.canDoubleJump = false;
+
+        GameObject tmp = Instantiate(jumpEffectPrefab, jumpEffectPos.position, jumpEffectPrefab.transform.rotation);
+        Destroy(tmp, 1f);
+        _player.PlayAnimation("Double jump");
+    }
     public void JumpAnimationLogic()
     {
         _rb.AddForce(new Vector2(0, _jumpForce));

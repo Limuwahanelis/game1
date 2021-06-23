@@ -33,6 +33,7 @@ public class Player : MonoBehaviour, IAnimatable
     public bool isJumping;
     [HideInInspector]
     public bool isMovableByPlayer = true;
+    [HideInInspector]
     public bool isOnGround;
     [HideInInspector]
     public bool isFalling;
@@ -44,6 +45,8 @@ public class Player : MonoBehaviour, IAnimatable
     public bool isHit;
     [HideInInspector]
     public bool isNearWall;
+
+    public bool canDoubleJump;
 
     public bool checkForLastPush = false;
     public bool performedLastPush = false;
@@ -73,6 +76,7 @@ public class Player : MonoBehaviour, IAnimatable
             {
                 if (isOnGround)
                 {
+                    canDoubleJump = true;
                     playerMovement.ChangePhysicsMaterial(normalMat);
                     if (isMoving) PlayAnimation("Walk");
                     else PlayAnimation("Idle");
@@ -91,6 +95,7 @@ public class Player : MonoBehaviour, IAnimatable
             }
             if (!isOnGround)
             {
+                
                 if (isFalling)
                 {
                     if (!isPushedBack) PlayAnimation("Fall");
