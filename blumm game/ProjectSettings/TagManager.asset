@@ -45,11 +45,14 @@ TagManager:
   - name: Background
     uniqueID: 230269291
     locked: 0
-  - name: Walking Ground
-    uniqueID: 3280314089
+  - name: Trap
+    uniqueID: 1147790485
     locked: 0
   - name: PickUps
     uniqueID: 3458491213
+    locked: 0
+  - name: Walking Ground
+    uniqueID: 3280314089
     locked: 0
   - name: Player
     uniqueID: 1135921019
