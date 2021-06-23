@@ -21,6 +21,7 @@ public class Player : MonoBehaviour, IAnimatable
     public PlayerMovement playerMovement;
     public PlayerCombat playerCombat;
     public HealthSystem playerHealth;
+    public AbilityManager abilityManager;
 
     public PhysicsMaterial2D noFrictionMat;
     public PhysicsMaterial2D normalMat;
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour, IAnimatable
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<HealthSystem>();
+        abilityManager = GetComponent<AbilityManager>();
         playerHealth.OnHit +=playerCombat.PlayerHit;
         playerHealth.OnPush+= playerMovement.CollidedWithEnemy;
         playerHealth.OnDeath = playerCombat.KillPlayer;

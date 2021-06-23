@@ -70,11 +70,11 @@ public class PlayerCamera : MonoBehaviour
         {
             targetPos = player.transform.position;
         }
-        if (Mathf.Abs(targetPos.x - transform.position.x) > 0.3 || Mathf.Abs(targetPos.y - transform.position.y) > 0.3)
-        {
+        //if (Mathf.Abs(targetPos.x - transform.position.x) > 0.3 || Mathf.Abs(targetPos.y - transform.position.y) > 0.3)
+        //{
             targetPos += offset;
             transform.position = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, smoothTime);
-        }
+       // }
     }
 
     private void CheckIfPlayerIsOnRightScreenBorder()

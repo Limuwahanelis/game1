@@ -47,6 +47,7 @@ public abstract class Enemy : MonoBehaviour,IAnimatable
         mainCollider.SetActive(false);
         _isAlive = false;
         currentState = EnemyEnums.State.DEAD;
+        hpSys.isInvincible = true;
         PlayAnimation("Death");
         StartCoroutine(WaitAndExecuteFunction(GetAnimationLength("Death"), () => Destroy(gameObject)));
     }
