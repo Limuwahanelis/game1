@@ -19,6 +19,23 @@ public class AnimationManagerEditor : Editor
         stateNames = serializedObject.FindProperty("stateNames");
         stateLengths = serializedObject.FindProperty("stateLengths");
         man = target as AnimationManager;
+        serializedObject.Update();
+
+            if (man.animatorController != null)
+            {
+                stateLengths.ClearArray();
+                stateNames.ClearArray();
+                for (int i = 0; i < man.animatorController.layers[0].stateMachine.states.Length; i++)
+                {
+                    AnimatorState state = man.animatorController.layers[0].stateMachine.states[i].state;
+                    stateLengths.InsertArrayElementAtIndex(stateLengths.arraySize);
+                    stateLengths.GetArrayElementAtIndex(stateLengths.arraySize - 1).floatValue = state.motion.averageDuration;
+                    stateNames.InsertArrayElementAtIndex(stateNames.arraySize);
+                    stateNames.GetArrayElementAtIndex(stateNames.arraySize - 1).stringValue = state.name;
+                }
+
+            }
+        serializedObject.ApplyModifiedProperties();
     }
     public override void OnInspectorGUI()
     {
@@ -30,9 +47,8 @@ public class AnimationManagerEditor : Editor
         serializedObject.ApplyModifiedProperties();
 
         serializedObject.Update();
-        if (EditorGUI.EndChangeCheck())
-        {
-            Debug.Log("ditre");
+       if (EditorGUI.EndChangeCheck())
+       {
             if (man.animatorController != null)
             {
                 stateLengths.ClearArray();
@@ -53,4 +69,6 @@ public class AnimationManagerEditor : Editor
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(man);
     }
+
+    
 }

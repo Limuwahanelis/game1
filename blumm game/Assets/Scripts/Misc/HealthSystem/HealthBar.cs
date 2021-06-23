@@ -41,7 +41,7 @@ public class HealthBar : MonoBehaviour
     }
     public void ReduceHealth(int dmg)
     {
-        for(int i=_previousHealth; i>=currentHP.value;i--)
+        for(int i= currentHP.value; i>=currentHP.value;i--)
         {
             
             lives[i].ChangeHeart(true);

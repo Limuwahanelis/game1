@@ -183,8 +183,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1135921019
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -4099418257374492983, guid: 9a0ec7e13f4b5fd4ca398ddf785523a7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -446,10 +446,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 7860446478177638940}
-  isGamePaused:
-    useConstant: 0
-    constantValue: 0
-    variable: {fileID: 11400000, guid: 5a21cd1d0300b6340940c865c64fd878, type: 2}
 --- !u!114 &7860446478177638942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,8 +549,6 @@ MonoBehaviour:
   - Attack
   - Hit
   - Death
-  - dsdsad
-  - dsdsad 0
   stateLengths:
   - 0.43333334
   - 1.0166667
@@ -564,8 +558,6 @@ MonoBehaviour:
   - 0.26666668
   - 0.18333334
   - 0.68333334
-  - 0.26666668
-  - 0.26666668
 --- !u!95 &7860446478177638930
 Animator:
   serializedVersion: 3
