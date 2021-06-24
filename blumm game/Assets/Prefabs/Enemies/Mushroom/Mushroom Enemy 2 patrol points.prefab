@@ -101,7 +101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8681547891445100892, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
       propertyPath: collisionDmg
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8681547891445100892, guid: 3391ab4b244f6fb4b88199ee68d4c76b, type: 3}
       propertyPath: patrolPoints.Array.size
