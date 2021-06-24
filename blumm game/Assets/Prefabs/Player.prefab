@@ -44,8 +44,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.01495564, y: 0.006140828}
-  m_Size: {x: 0.47008872, y: 0.98771834}
+  m_Offset: {x: -0.01495564, y: -0.02195239}
+  m_Size: {x: 0.47008872, y: 0.9315319}
   m_Direction: 0
 --- !u!1 &5138200195359187134
 GameObject:
@@ -423,6 +423,7 @@ MonoBehaviour:
   abilityManager: {fileID: 3908763065827252970}
   noFrictionMat: {fileID: 6200000, guid: 9f7b94c38e714e64d96dc11a144b8b90, type: 2}
   normalMat: {fileID: 6200000, guid: 11b2115bebe90f240ac0e1fbd2870cb8, type: 2}
+  playerCore: {fileID: 7860446477779914031}
   isAlive: 1
   isMoving: 0
   isJumping: 0

@@ -136,7 +136,10 @@ public class Goblin : PatrollingEnemy
     }
     protected override void SetPlayerNotInRange()
     {
-        if (currentState != EnemyEnums.State.DEAD) ResumeActions();
+        if (currentState != EnemyEnums.State.DEAD)
+        {
+            StartCoroutine(WaitAndExecuteFunction(GetCurrentAnimationRemainingLength(), ResumeActions)); 
+        }
     }
 
 

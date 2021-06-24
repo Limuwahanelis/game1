@@ -62,6 +62,7 @@ public class PlayerCombat : MonoBehaviour
         {
             _player.StopAllActions();
             _player.PlayAnimation("Death");
+            _player.playerCore.enabled = false;
             _player.isAlive = false;
         }
     }
@@ -81,7 +82,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private IEnumerator CheckForLatPushCor()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.02f);
         if (_player.checkForLastPush) KillPlayer();
     }
     private void OnDrawGizmos()

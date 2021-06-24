@@ -26,6 +26,8 @@ public class Player : MonoBehaviour, IAnimatable
     public PhysicsMaterial2D noFrictionMat;
     public PhysicsMaterial2D normalMat;
 
+    public Collider2D playerCore;
+
     [HideInInspector]
     public bool isAlive = true;
     [HideInInspector]
