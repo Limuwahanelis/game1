@@ -126,14 +126,17 @@ public class Goblin : PatrollingEnemy
 
     protected override void SetPlayerInRange()
     {
-        states.Push(currentState);
-        currentState = EnemyEnums.State.ATTACKING;
-        StopCurrentActions();
-        Attack();
+        if (currentState != EnemyEnums.State.DEAD)
+        {
+            states.Push(currentState);
+            currentState = EnemyEnums.State.ATTACKING;
+            StopCurrentActions();
+            Attack();
+        }
     }
     protected override void SetPlayerNotInRange()
     {
-        ResumeActions();
+        if (currentState != EnemyEnums.State.DEAD) ResumeActions();
     }
 
 
