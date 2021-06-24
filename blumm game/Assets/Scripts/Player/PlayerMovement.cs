@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
             }));
             StartCoroutine(WaitForLiftOff());
         }
-        if(!_player.isOnGround && _player.canDoubleJump &&!_player.isJumping && _player.abilityManager.CheckIfAbilityIsUnloked(AbilityManager.PlayerAbilites.DOUBLEJUMP))
+        if(_player.isMovableByPlayer && !_player.isOnGround && _player.canDoubleJump &&!_player.isJumping && _player.abilityManager.CheckIfAbilityIsUnloked(AbilityManager.PlayerAbilites.DOUBLEJUMP))
         {
             DoubleJump();
         }
