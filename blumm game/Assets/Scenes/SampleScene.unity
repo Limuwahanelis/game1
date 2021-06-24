@@ -1855,11 +1855,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8761821597366941712, guid: 9a8b14bc3cd8e5d4ba18e842f30f1c52, type: 3}
       propertyPath: maxHP.useConstant
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8761821597366941712, guid: 9a8b14bc3cd8e5d4ba18e842f30f1c52, type: 3}
       propertyPath: currentHP.useConstant
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8761821597366941717, guid: 9a8b14bc3cd8e5d4ba18e842f30f1c52, type: 3}
       propertyPath: m_RootOrder
@@ -7950,11 +7950,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7860446478177638929, guid: 89ea6183dcaf91746adbd205ef0ffb80, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.23
+      value: -9.52
       objectReference: {fileID: 0}
     - target: {fileID: 7860446478177638929, guid: 89ea6183dcaf91746adbd205ef0ffb80, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.53
+      value: -0.01
       objectReference: {fileID: 0}
     - target: {fileID: 7860446478177638929, guid: 89ea6183dcaf91746adbd205ef0ffb80, type: 3}
       propertyPath: m_LocalPosition.z

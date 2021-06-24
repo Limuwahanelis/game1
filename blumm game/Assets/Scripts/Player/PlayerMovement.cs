@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         StopPlayerOnYAxis();
         _rb.AddForce(new Vector2(0, _jumpForce));
         _player.canDoubleJump = false;
-
+        _player.isFalling = false;
         GameObject tmp = Instantiate(jumpEffectPrefab, jumpEffectPos.position, jumpEffectPrefab.transform.rotation);
         Destroy(tmp, 1f);
         _player.PlayAnimation("Double jump");
