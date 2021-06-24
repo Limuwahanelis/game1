@@ -37,13 +37,12 @@ public class AnimationManager : MonoBehaviour
     {
         string clipToPlayName = null;
         int index = stateNames.FindIndex((x) => x == name);
-        clipToPlayName = stateNames[index];
-
-        if (clipToPlayName == null)
+        if(index==-1)
         {
             Debug.LogError("There is no state with name: " + name);
             return;
         }
+        clipToPlayName = stateNames[index];
         if (_currentAnimation == clipToPlayName) return;
         if (!canBePlayedOver)
         {
